@@ -2419,6 +2419,7 @@ fn dispatch(command: Command) -> Result<()> {
         Command::SupportReport(arguments) => run_support_report(arguments),
         Command::InstallHost(arguments) => install_host(arguments),
         Command::UninstallHost(arguments) => uninstall_host(arguments),
+        Command::StopHost => stop_installed_host(),
         Command::Host(_) => bail!("tray host must run on the process main thread"),
         Command::Bridge(arguments) => run_bridge(arguments),
     }

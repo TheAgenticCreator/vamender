@@ -25,9 +25,9 @@ is beta, with production-grade safety and release evidence required.
 
 `src/main.rs`, `src/app/cli.rs`, and the dispatcher in `src/app/mod.rs` expose
 `check`, `plan`, `repair`, `migrate`, `run`, and `restore`. Hidden `host`,
-`install-host`, `uninstall-host`, and `bridge` commands support the Windows
-installer, notification-area lifecycle, and in-VaM integration. Mutation
-capability is explicit in the CLI
+`install-host`, `stop-host`, `uninstall-host`, and `bridge` commands support the
+Windows installer, notification-area lifecycle, and in-VaM integration.
+Mutation capability is explicit in the CLI
 contract: inspection and planning are read-only, while applied operations
 require a durable backup root. See REQ-003, REQ-004, REQ-014, and REQ-017.
 
@@ -83,9 +83,12 @@ opens or rewrites AddonPackages directly. See REQ-016 and REQ-018.
 
 ### Installation and packaging
 
-`installer/VaMender.iss` provides per-user Windows Setup. The hidden host
-commands install the plugin VAR, configure/start the tray-hosted local engine,
-create a Start-menu restart shortcut, and remove application components safely.
+`installer/VaMender.iss` provides per-user Windows Setup. Before replacement it
+rejects active or queued engine work and stops an idle tray host cooperatively;
+an older-engine fallback supports upgrades from builds predating `stop-host`.
+The hidden host commands checksum-verify the plugin VAR, back up and retire old
+VaMender plugin revisions, configure/start the tray-hosted local engine, create
+a Start-menu restart shortcut, and remove application components safely.
 `tools/package-vam-plugin.ps1` constructs the
 Hub VAR; the plugin validation project checks CLR 2 loadability and sandbox
 metadata. See REQ-002, REQ-017, and REQ-020.

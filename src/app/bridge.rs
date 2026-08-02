@@ -13,6 +13,7 @@ const STATUS_FILE: &str = "status.txt";
 const RESPONSE_FILE: &str = "response.json";
 const HEARTBEAT_FILE: &str = "heartbeat.txt";
 const LOCK_FILE: &str = "bridge.lock";
+pub(super) const SHUTDOWN_FILE: &str = "shutdown.request";
 
 #[derive(Debug, Deserialize)]
 struct BridgeRequest {

@@ -24,9 +24,17 @@ and this project adheres to
 - Keep the constrained engine available across normal VaM launches and make
   shutdown cooperative so an active backup or repair finishes before exit.
 
+### Fixed
+
+- Stop the running tray engine before Setup replaces its executable, reject an
+  upgrade while work is active or queued, and use cooperative shutdown for
+  current installations with an upgrade-compatible fallback for older builds.
+- Checksum-verify the installed Session Plugin and back up and retire older
+  VaMender plugin revisions instead of leaving duplicate revisions installed.
+
 ### Security
 
-- Enforce the TheAgenticCreator publisher identity in project-authored commit
+- Enforce TheAgenticCreator publisher identity in project-authored commit
   and release-tag metadata with repository-local configuration, pre-push
   validation, CI/release gates, and an explicit `TheAgenticCreatorDev`
   authenticated-actor requirement.

@@ -198,7 +198,7 @@
     "description": "",
     "requirement_id": "REQ-017",
     "type": "e2e",
-    "verification_method": "Pass host-install Rust tests and Setup build, then smoke install, unsafe-path rejection, startup, plugin preservation, uninstall, and retained backups/reports.",
+    "verification_method": "Pass host-install Rust tests and Setup build, then upgrade with a running idle host and verify pre-replacement shutdown without a Restart Manager warning, reject active/queued work without changes, verify executable/plugin checksums, back up and retire the older VaMender plugin revision, restart exactly one healthy host, reject unsafe paths, uninstall, and retain backups/reports.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -330,7 +330,7 @@
     "description": "",
     "requirement_id": "REQ-028",
     "type": "integration",
-    "verification_method": "Build and install on Windows x64, verify the notification-area icon and menu actions, confirm Start with Windows registration uses the hidden host command, confirm the bridge stays available while VaM opens and closes, then request Exit during idle and active work and verify cooperative shutdown plus lock cleanup.",
+    "verification_method": "Build and install on Windows x64, verify the notification-area icon and menu actions, confirm Start with Windows registration uses the hidden host command, confirm the bridge stays available while VaM opens and closes, reject external shutdown while work is active or queued, then request tray and external shutdown while idle and verify cooperative exit, lock cleanup, unchanged startup registration, and one healthy no-argument restart.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0

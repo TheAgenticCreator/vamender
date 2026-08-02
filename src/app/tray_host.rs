@@ -212,6 +212,19 @@ mod windows {
 
     pub(super) fn run(arguments: BridgeArgs) -> Result<()> {
         let executable = std::env::current_exe().context("cannot locate VaMender executable")?;
+        let shutdown_request = state_folder(&arguments).join(SHUTDOWN_FILE);
+        match fs::remove_file(&shutdown_request) {
+            Ok(()) => {}
+            Err(error) if error.kind() == io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(error).with_context(|| {
+                    format!(
+                        "cannot clear stale shutdown request {}",
+                        shutdown_request.display()
+                    )
+                });
+            }
+        }
         let engine_arguments = arguments.clone();
         let stop = Arc::new(AtomicBool::new(false));
         let engine_stop = Arc::clone(&stop);
@@ -240,6 +253,16 @@ mod windows {
 
         let mut exit_requested = false;
         while !exit_requested {
+            if shutdown_request.is_file() {
+                fs::remove_file(&shutdown_request).with_context(|| {
+                    format!(
+                        "cannot consume shutdown request {}",
+                        shutdown_request.display()
+                    )
+                })?;
+                exit_requested = true;
+                continue;
+            }
             pump_windows_messages();
             while let Ok(event) = MenuEvent::receiver().try_recv() {
                 match handle_action(event.id(), &ids, &startup, &arguments, &executable) {

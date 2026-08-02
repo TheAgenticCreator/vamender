@@ -39,6 +39,9 @@ pub(super) enum Command {
     /// Remove the automatic VaM integration host.
     #[command(hide = true)]
     UninstallHost(UninstallHostArgs),
+    /// Stop the installed tray host cooperatively without changing startup settings.
+    #[command(name = "stop-host", hide = true)]
+    StopHost,
     /// Internal tray-host mode used by automatic per-user startup.
     #[command(hide = true)]
     Host(BridgeArgs),

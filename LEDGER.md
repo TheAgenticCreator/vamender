@@ -133,3 +133,13 @@
 - **Changes**: Moved the quality, CodeQL, and release-validation jobs to GitHub-hosted Windows runners; replaced Bash-only SPDX and version/changelog validation with fail-closed PowerShell; made all default run shells PowerShell; renamed required contexts to state Windows scope explicitly. Linux and macOS runners are no longer authoritative or configured because VaMender and VaM support Windows x64 only.
 - **Evidence required**: YAML parse, zero Linux/macOS runner or Bash-shell declarations, local PowerShell-equivalent gates, green Windows quality/packaging/CodeQL runs, protected-main required contexts, and no release until the complete Windows/VaM acceptance matrix passes.
 - **Status**: implementation complete; verification pending; release prohibited
+
+## 2026-08-02 — installer running-host upgrade regression
+
+- **Author**: TheAgenticCreator
+- **Type**: Windows installer safety correction and supported-environment evidence
+- **REQs affected**: REQ-017, REQ-020, REQ-022, REQ-023, REQ-028
+- **Observed defect**: The exact green-CI Setup artifact reached Windows Restart Manager with the installed VaMender tray engine still holding `vamender.exe`; automatic close timed out after 30 seconds and presented Abort/Retry/Ignore. The first-pass installer otherwise completed after the engine was stopped explicitly.
+- **Changes**: Added busy-aware cooperative external shutdown and lock cleanup, a hidden `stop-host` command, an upgrade-compatible pre-install fallback for older engines, checksum verification of the installed Session Plugin, backup-first retirement of older VaMender plugin revisions, and a sanitized seven-screen installation guide.
+- **Evidence**: Formatting, strict Clippy, and all 20 Rust tests pass. Inno Setup 6.7.3 compiled the corrected Setup. A live running-host upgrade completed in approximately two seconds with Restart Manager reporting no file users; installed executable and revision-2 VAR hashes matched their build artifacts; revision 1 was copied to durable `install-history` before removal; exactly one restarted engine owned the lock and advanced `heartbeat.txt`; Start with Windows remained registered. A synthetic RUNNING state made `stop-host` fail closed without terminating the engine; idle shutdown then exited cooperatively, removed the lock, preserved startup registration, and no-argument launch restored exactly one healthy engine.
+- **Status**: local supported-Windows installer regression passed; fresh CI/CodeQL and remaining disposable-library/VaM acceptance evidence are required; release prohibited

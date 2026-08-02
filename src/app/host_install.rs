@@ -139,14 +139,31 @@ fn remove_engine_lock(lock: &Path) -> Result<()> {
     Ok(())
 }
 
-#[cfg(windows)]
-fn stop_existing_host(vam_root: &Path) -> Result<()> {
-    let lock = vam_root
+fn host_state(vam_root: &Path) -> PathBuf {
+    vam_root
         .join("Saves")
         .join("PluginData")
         .join("VaMender")
         .join("Bridge")
-        .join("bridge.lock");
+}
+
+fn engine_is_busy(state: &Path) -> Result<bool> {
+    if state.join("request.json").is_file() {
+        return Ok(true);
+    }
+    let status_path = state.join("status.txt");
+    if !status_path.is_file() {
+        return Ok(false);
+    }
+    let current = fs::read_to_string(&status_path)
+        .with_context(|| format!("cannot read engine status {}", status_path.display()))?;
+    Ok(current.trim_start().starts_with("RUNNING:"))
+}
+
+#[cfg(windows)]
+fn stop_existing_host(vam_root: &Path) -> Result<()> {
+    let state = host_state(vam_root);
+    let lock = state.join("bridge.lock");
     if !lock.is_file() {
         return Ok(());
     }
@@ -162,22 +179,25 @@ fn stop_existing_host(vam_root: &Path) -> Result<()> {
     if !name.eq_ignore_ascii_case("vamender.exe") {
         bail!("engine lock PID {pid} belongs to {name}; refusing to stop an unrelated process");
     }
-
-    let pid_argument = pid.to_string();
-    let status = ProcessCommand::new("taskkill.exe")
-        .args(["/PID", pid_argument.as_str(), "/T", "/F"])
-        .status()
-        .context("cannot stop the existing VaMender engine")?;
-    if !status.success() && process_name(pid)?.is_some() {
-        bail!("cannot stop existing VaMender engine PID {pid}");
+    if engine_is_busy(&state)? {
+        bail!(
+            "VaMender is running or has a queued operation; wait for it to finish before installing or uninstalling"
+        );
     }
-    for _ in 0..50 {
+
+    let shutdown = state.join(SHUTDOWN_FILE);
+    fs::write(&shutdown, format!("stop requested for engine PID {pid}\n"))
+        .with_context(|| format!("cannot request engine shutdown at {}", shutdown.display()))?;
+    for _ in 0..600 {
         if process_name(pid)?.is_none() {
+            let _ = fs::remove_file(&shutdown);
             return remove_engine_lock(&lock);
         }
         std::thread::sleep(std::time::Duration::from_millis(100));
     }
-    bail!("existing VaMender engine PID {pid} did not stop within five seconds")
+    bail!(
+        "VaMender engine PID {pid} did not stop cooperatively within 60 seconds; wait for any active operation, exit VaMender from its tray menu, and retry"
+    )
 }
 #[cfg(not(windows))]
 fn stop_existing_host(_vam_root: &Path) -> Result<()> {
@@ -320,30 +340,68 @@ pub(super) fn set_start_with_windows(
     }
 }
 
+const PLUGIN_CREATOR: &str = "AgenticCreator";
+const PLUGIN_PACKAGE: &str = "VaMender";
+const PLUGIN_REVISION: u32 = 2;
+const PLUGIN_FILENAME: &str = "AgenticCreator.VaMender.2.var";
+
+fn preserve_plugin(package: &Path, backup: &Path) -> Result<PathBuf> {
+    let name = package.file_name().context("plugin VAR has no filename")?;
+    let digest = sha256(package)?;
+    let previous = backup
+        .join("install-history")
+        .join(format!("{digest}-{}", name.to_string_lossy()));
+    fs::create_dir_all(previous.parent().context("invalid plugin backup path")?)?;
+    fs::copy(package, &previous).with_context(|| {
+        format!(
+            "cannot preserve existing plugin {} as {}",
+            package.display(),
+            previous.display()
+        )
+    })?;
+    if sha256(&previous)? != digest {
+        bail!(
+            "plugin backup checksum does not match source: {}",
+            previous.display()
+        );
+    }
+    Ok(previous)
+}
+
+fn older_plugin_revisions(packages: &Path) -> Result<Vec<PathBuf>> {
+    let mut revisions = Vec::new();
+    for entry in fs::read_dir(packages)
+        .with_context(|| format!("cannot list plugin directory {}", packages.display()))?
+    {
+        let entry = entry?;
+        if !entry.file_type()?.is_file() {
+            continue;
+        }
+        let name = entry.file_name().to_string_lossy().into_owned();
+        let Some(id) = package_file_id(&name) else {
+            continue;
+        };
+        if id.creator == PLUGIN_CREATOR
+            && id.package == PLUGIN_PACKAGE
+            && id.version < PLUGIN_REVISION
+        {
+            revisions.push(entry.path());
+        }
+    }
+    revisions.sort();
+    Ok(revisions)
+}
+
 fn install_plugin(source: &Path, packages: &Path, backup: &Path) -> Result<()> {
     let source = fs::canonicalize(source)
         .with_context(|| format!("cannot resolve plugin VAR {}", source.display()))?;
     let name = source.file_name().context("plugin VAR has no filename")?;
-    if name.to_string_lossy() != "AgenticCreator.VaMender.2.var" {
-        bail!(
-            "expected AgenticCreator.VaMender.2.var, got {}",
-            source.display()
-        );
+    if name.to_string_lossy() != PLUGIN_FILENAME {
+        bail!("expected {PLUGIN_FILENAME}, got {}", source.display());
     }
     let destination = packages.join(name);
     if destination.exists() {
-        let digest = sha256(&destination)?;
-        let previous = backup
-            .join("install-history")
-            .join(format!("{digest}-{}", name.to_string_lossy()));
-        fs::create_dir_all(previous.parent().context("invalid plugin backup path")?)?;
-        fs::copy(&destination, &previous).with_context(|| {
-            format!(
-                "cannot preserve existing plugin {} as {}",
-                destination.display(),
-                previous.display()
-            )
-        })?;
+        preserve_plugin(&destination, backup)?;
     }
     fs::copy(&source, &destination).with_context(|| {
         format!(
@@ -352,6 +410,22 @@ fn install_plugin(source: &Path, packages: &Path, backup: &Path) -> Result<()> {
             destination.display()
         )
     })?;
+    if sha256(&source)? != sha256(&destination)? {
+        bail!(
+            "installed plugin checksum does not match source: {}",
+            destination.display()
+        );
+    }
+
+    for older in older_plugin_revisions(packages)? {
+        preserve_plugin(&older, backup)?;
+        fs::remove_file(&older).with_context(|| {
+            format!(
+                "cannot retire old VaMender plugin revision {} after backup",
+                older.display()
+            )
+        })?;
+    }
     Ok(())
 }
 
@@ -417,6 +491,15 @@ pub(super) fn install_host(arguments: InstallHostArgs) -> Result<()> {
     println!("Library: {}", packages.display());
     println!("Backup: {}", backup.display());
     println!("No PowerShell script or open console is required.");
+    Ok(())
+}
+
+pub(super) fn stop_installed_host() -> Result<()> {
+    let install_root = local_app_data()?;
+    if let Some(vam_root) = configured_vam_root(&install_root)? {
+        stop_existing_host(&vam_root)?;
+    }
+    println!("VaMender tray host stopped safely.");
     Ok(())
 }
 
@@ -496,7 +579,7 @@ mod tests {
     }
 
     #[test]
-    fn preserves_existing_plugin_before_install() -> Result<()> {
+    fn preserves_existing_plugin_and_retires_older_revision() -> Result<()> {
         let temporary = tempfile::tempdir()?;
         let source_root = temporary.path().join("release");
         let packages = temporary.path().join("AddonPackages");
@@ -508,10 +591,13 @@ mod tests {
         let source = source_root.join(name);
         fs::write(&source, b"new")?;
         fs::write(packages.join(name), b"old")?;
+        let old_name = "AgenticCreator.VaMender.1.var";
+        fs::write(packages.join(old_name), b"older revision")?;
 
         install_plugin(&source, &packages, &backup)?;
 
         assert_eq!(fs::read(packages.join(name))?, b"new");
+        assert!(!packages.join(old_name).exists());
         let old_hash = Sha256::digest(b"old");
         let old_hash = format!("{old_hash:x}");
         assert_eq!(
@@ -522,6 +608,35 @@ mod tests {
             )?,
             b"old"
         );
+        let older_hash = Sha256::digest(b"older revision");
+        let older_hash = format!("{older_hash:x}");
+        assert_eq!(
+            fs::read(
+                backup
+                    .join("install-history")
+                    .join(format!("{older_hash}-{old_name}")),
+            )?,
+            b"older revision"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn detects_active_or_queued_engine_work() -> Result<()> {
+        let temporary = tempfile::tempdir()?;
+        assert!(!engine_is_busy(temporary.path())?);
+        fs::write(
+            temporary.path().join("status.txt"),
+            b"RUNNING: repair request 1",
+        )?;
+        assert!(engine_is_busy(temporary.path())?);
+        fs::write(
+            temporary.path().join("status.txt"),
+            b"COMPLETE: repair finished",
+        )?;
+        assert!(!engine_is_busy(temporary.path())?);
+        fs::write(temporary.path().join("request.json"), b"{}")?;
+        assert!(engine_is_busy(temporary.path())?);
         Ok(())
     }
 }

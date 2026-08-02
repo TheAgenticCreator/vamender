@@ -158,9 +158,11 @@
   source: installer/VaMender.iss; src/app/host_install.rs
   description: >-
     Setup validates VaM.exe and AddonPackages, requires a durable backup path
-    outside AddonPackages, installs engine/plugin without elevation, configures
-    automatic per-user startup, preserves an existing plugin before
-    replacement, and retains backups/reports on uninstall.
+    outside AddonPackages, refuses to interrupt active or queued engine work,
+    stops an idle tray host before replacing its executable, installs without
+    elevation, checksum-verifies the new plugin, backs up and retires older
+    VaMender plugin revisions, configures automatic per-user startup, and
+    retains backups/reports on uninstall.
 
 - id: REQ-018
   title: Content rights and privacy boundary
@@ -284,5 +286,6 @@
     it available across ordinary VaM launches, launches VaM on request, opens
     report and backup folders, reports product/version and safety information,
     toggles Start with Windows, and exits cooperatively after any in-flight
-    operation finishes. Setup enables Start with Windows by default, and VaM's
-    plugin sandbox is not used to spawn or terminate the host.
+    operation finishes. The same busy-aware cooperative shutdown is available
+    to Setup before executable replacement. Setup enables Start with Windows by
+    default, and VaM's plugin sandbox is not used to spawn or terminate the host.

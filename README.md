@@ -112,11 +112,15 @@ sandbox validation, and the Windows release build pass.
 3. Select the folder containing `VaM.exe` and a durable backup folder outside
    `AddonPackages`.
 
+See the [illustrated Windows Setup guide](docs/INSTALLATION.md) for every page.
+
 Setup installs the engine, the VaM Session Plugin VAR, and a small VaMender
 notification-area host. It requires no PowerShell script, terminal command,
 administrator rights, or open console. The host starts with Windows by default
 and keeps the real VaMender engine ready before, during, and after ordinary VaM
-sessions.
+sessions. During an upgrade, Setup refuses to interrupt active or queued work,
+stops an idle host before replacing its executable, checksum-verifies the new
+plugin, and backs up and retires older VaMender plugin revisions.
 
 Right-click the VaMender shield in the Windows notification area to:
 

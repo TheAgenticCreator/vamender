@@ -152,3 +152,49 @@ begin
     end;
   end;
 end;
+
+function EngineIsBusy: Boolean;
+var
+  StatusLines: TArrayOfString;
+  StatusPath: String;
+  RequestPath: String;
+begin
+  StatusPath := AddBackslash(GetVaMRoot('')) +
+    'Saves\PluginData\VaMender\Bridge\status.txt';
+  RequestPath := AddBackslash(GetVaMRoot('')) +
+    'Saves\PluginData\VaMender\Bridge\request.json';
+  Result := FileExists(RequestPath);
+  if (not Result) and LoadStringsFromFile(StatusPath, StatusLines) and
+     (GetArrayLength(StatusLines) > 0) then
+    Result := Pos('RUNNING:', Trim(StatusLines[0])) = 1;
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  Engine: String;
+  ExitCode: Integer;
+begin
+  Result := '';
+  Engine := ExpandConstant('{app}\{#MyAppExeName}');
+  if not FileExists(Engine) then
+    Exit;
+
+  if EngineIsBusy then
+  begin
+    Result :=
+      'VaMender is currently running or has a queued operation. ' +
+      'Wait for it to finish, then run Setup again. No files were changed.';
+    Exit;
+  end;
+
+  { Current builds support stop-host. The uninstall-host fallback safely }
+  { upgrades older builds that predate cooperative external shutdown. }
+  if Exec(Engine, 'stop-host', '', SW_HIDE, ewWaitUntilTerminated, ExitCode) and
+     (ExitCode = 0) then
+    Exit;
+  if (not Exec(Engine, 'uninstall-host', '', SW_HIDE,
+      ewWaitUntilTerminated, ExitCode)) or (ExitCode <> 0) then
+    Result :=
+      'Setup could not stop the existing VaMender tray engine safely. ' +
+      'Exit VaMender from its notification-area menu and run Setup again.';
+end;
