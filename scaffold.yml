@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: MIT
+extends: ''
+name: vamender
+type: cli-rust
+platforms:
+- windows
+language: rust
+spec_version: 0.25.0
+aee_phase: inception
+description: Production-grade, backup-first VAR repair and dependency cleanup
+  for Virt-a-Mate, distributed in the beta release channel.
+services: false
+shell_wrappers: true
+exec_shims: true
+git_init: false
+vcs_platform: github
+branching_strategy: trunk
+default_branch: main
+develop_branch: develop
+require_pr_reviews: true
+required_approvals: 1
+require_ci_pass: true
+allow_force_push: false
+use_remote_rules: false
+verification_tools: {}
+detected_build_system: cargo
+detected_test_framework: cargo-test
+license: MIT
+community_files:
+- contributing
+- license
+- security
+- coc
+- pr-template
+- issue-templates
+auxiliary_disciplines: []
+type_override: ''
+fallback_type: ''
+provisional_app_number: ''
+provisional_filed_date: ''
+non_provisional_deadline: ''
+entity_status: ''
+assignee: ''
+counsel: ''
+inventors: []
+ip_families: []
+claim_themes: []
+specs_dir: docs/ip/specs
+prosecution_dir: docs/ip/prosecution
+strategy_dir: docs/ip/strategy
+filings_dir: docs/ip/filings
+fpga_vendor: ''
+integrations:
+- agents-md
+execution_profile: standard
+custom_allowed_commands: []
+custom_blocked_commands: []
+custom_blocked_tools: []
+agents_md_line_threshold: 0
+ledger_line_threshold: 0
+test_spec_file: docs/TESTS.md
+requirements_file: docs/REQUIREMENTS.md
+scan_exclude_dirs: []
+derived_artifacts: []
+hardware_gated_test_attr: hardware_gated
+cross_repo_dependencies: []
+secrets_templates: []
+industrial_artifacts: {}
+rate_limit_concurrency_by_bucket: {}
+publication_phases: {}
+enable_epistemic: false
+epistemic_threshold: 0.7
+enable_trace_vault: false
+enable_development_mode: false

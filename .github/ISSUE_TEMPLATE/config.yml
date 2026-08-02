@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: MIT
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security or data-integrity vulnerability
+    url: https://github.com/TheAgenticCreator/vamender/security/advisories/new
+    about: Report unexpected destructive behavior and vulnerabilities privately.
+  - name: Usage and safety documentation
+    url: https://github.com/TheAgenticCreator/vamender#readme
+    about: Read the backup requirements and recommended workflow first.

@@ -1,0 +1,203 @@
+# SPDX-License-Identifier: MIT
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: pwsh
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Windows quality gates
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check pseudonymous maintainer history
+        shell: pwsh
+        run: ./tools/check-maintainer-identity.ps1 -Revision HEAD
+      - name: Install governance runtime
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install Specsmith
+        run: python -m pip install --pre specsmith==0.25.0
+      - name: Validate Specsmith governance
+        run: |
+          specsmith sync --project-dir . --check
+          specsmith req gaps --project-dir .
+          specsmith req orphans --project-dir .
+          specsmith audit --project-dir .
+      - name: Install build toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.88.0
+          components: rustfmt, clippy
+      - name: Install plugin validation SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+      - name: Check formatting
+        run: cargo fmt --check
+      - name: Check SPDX identifiers
+        run: |
+          $failed = @()
+          foreach ($file in (& git ls-files)) {
+            $head = @(Get-Content -LiteralPath $file -TotalCount 3 -ErrorAction SilentlyContinue) -join "`n"
+            if ($head.Contains("SPDX-License-Identifier: MIT")) {
+              continue
+            }
+            $sidecar = "$file.license"
+            if ((Test-Path -LiteralPath $sidecar) -and
+                ([IO.File]::ReadAllText($sidecar).Contains("SPDX-License-Identifier: MIT"))) {
+              continue
+            }
+            Write-Output "::error file=$file::Missing SPDX-License-Identifier: MIT"
+            $failed += $file
+          }
+          if ($failed.Count -gt 0) {
+            throw "$($failed.Count) tracked file(s) lack SPDX coverage."
+          }
+      - name: Lint
+        run: >-
+          cargo clippy --all-targets --all-features --locked --
+          -D warnings
+          -D clippy::cognitive_complexity
+      - name: Test
+        run: cargo test --all-targets --all-features --locked
+      - name: Restore native VaM plugin validation
+        run: >-
+          dotnet restore vam-plugin/test/VaMender.Plugin.Validation.csproj
+          --configfile vam-plugin/test/NuGet.config
+      - name: Compile native VaM plugin against API stubs
+        run: >-
+          dotnet build vam-plugin/test/VaMender.Plugin.Validation.csproj
+          --configuration Release
+          --no-restore
+      - name: Stamp the validated CLR 2 plugin baseline
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path Cargo.toml -Pattern '^version = "([^"]+)"').Matches[0].Groups[1].Value
+          ./tools/stamp-vam-plugin-release.ps1 `
+            -Version $version `
+            -OutputPath ./target/stamped-plugin/VaMender.dll
+          Copy-Item `
+            ./target/stamped-plugin/VaMender.dll `
+            ./vam-plugin/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll `
+            -Force
+      - name: Validate VaM plugin security metadata
+        run: >-
+          dotnet run
+          --project vam-plugin/test/VaMender.Plugin.Validation.csproj
+          --configuration Release
+          --no-build
+          --
+          vam-plugin/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll
+      - name: Build and validate Hub VAR
+        shell: pwsh
+        run: >-
+          ./tools/package-vam-plugin.ps1
+          -OutputPath ./target/AgenticCreator.VaMender.2.var
+
+  windows-release:
+    name: Windows packaging smoke test
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check pseudonymous maintainer history
+        shell: pwsh
+        run: ./tools/check-maintainer-identity.ps1 -Revision HEAD
+      - name: Stamp the validated CLR 2 plugin baseline
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path Cargo.toml -Pattern '^version = "([^"]+)"').Matches[0].Groups[1].Value
+          ./tools/stamp-vam-plugin-release.ps1 `
+            -Version $version `
+            -OutputPath ./target/stamped-plugin/VaMender.dll
+          Copy-Item `
+            ./target/stamped-plugin/VaMender.dll `
+            ./vam-plugin/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll `
+            -Force
+      - name: Install build toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.88.0
+      - name: Build
+        run: cargo build --release --locked
+      - name: Build Hub VAR
+        shell: pwsh
+        run: |
+          ./tools/package-vam-plugin.ps1 -OutputPath ./target/AgenticCreator.VaMender.2.var
+          $hash = (Get-FileHash `
+            ./target/AgenticCreator.VaMender.2.var `
+            -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  AgenticCreator.VaMender.2.var" |
+            Set-Content ./target/AgenticCreator.VaMender.2.var.sha256
+      - name: Verify executable branding
+        shell: pwsh
+        run: |
+          $exe = (Resolve-Path target\release\vamender.exe).Path
+          $info = (Get-Item $exe).VersionInfo
+          if ($info.ProductName -ne "VaMender") {
+            throw "Unexpected ProductName: $($info.ProductName)"
+          }
+          if ($info.OriginalFilename -ne "vamender.exe") {
+            throw "Unexpected OriginalFilename: $($info.OriginalFilename)"
+          }
+          $expectedVersion = (Select-String -Path Cargo.toml -Pattern '^version = "([^"]+)"').Matches[0].Groups[1].Value
+          if ($info.ProductVersion -ne $expectedVersion) {
+            throw "ProductVersion $($info.ProductVersion) does not match $expectedVersion"
+          }
+          Add-Type -AssemblyName System.Drawing
+          $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($exe)
+          if ($null -eq $icon) {
+            throw "The release executable has no associated icon"
+          }
+          $icon.Dispose()
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+      - name: Build and verify one-click Setup
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path dist | Out-Null
+          Copy-Item target\AgenticCreator.VaMender.2.var dist\
+          iscc.exe .\installer\VaMender.iss
+          if ($LASTEXITCODE -ne 0) {
+            throw "Inno Setup failed with exit code $LASTEXITCODE"
+          }
+          $setup = Get-Item .\dist\VaMender-Setup-*.exe
+          $expectedVersion = (Select-String -Path Cargo.toml -Pattern '^version = "([^"]+)"').Matches[0].Groups[1].Value
+          if ($setup.Name -ne "VaMender-Setup-$expectedVersion.exe") {
+            throw "Unexpected Setup filename: $($setup.Name)"
+          }
+          $hash = (Get-FileHash $setup.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($setup.Name)" | Set-Content "$($setup.FullName).sha256"
+      - name: Upload Windows bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: vamender-windows-x64
+          path: |
+            target/release/vamender.exe
+            target/AgenticCreator.VaMender.2.var
+            target/AgenticCreator.VaMender.2.var.sha256
+            dist/VaMender-Setup-*.exe
+            dist/VaMender-Setup-*.exe.sha256
+          if-no-files-found: error

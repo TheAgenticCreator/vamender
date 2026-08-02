@@ -1,0 +1,78 @@
+# SPDX-License-Identifier: MIT
+name: Bug report
+description: Report incorrect behavior using redacted, synthetic evidence.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Back up first and keep VaM closed during write operations.**
+        Do not attach paid/private VARs, personal logs, tokens, or backup manifests.
+        Report unexpected data loss or overwrite behavior privately through Security.
+  - type: input
+    id: version
+    attributes:
+      label: VaMender version
+      placeholder: "v0.1.1"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Windows version
+      placeholder: "Windows 11 24H2"
+    validations:
+      required: true
+  - type: dropdown
+    id: command
+    attributes:
+      label: Command
+      options:
+        - check
+        - plan
+        - repair
+        - migrate
+        - run
+        - restore
+        - support-report
+        - In-VaM control panel
+        - Windows Setup or engine host
+        - Portable CLI workflow
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Include the exact command with personal paths replaced.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Reviewed support bundle or redacted excerpts
+      description: Run `vamender support-report <AddonPackages> --vam-log <output_log.txt>`, review every generated file, then drag the ZIP here or paste only the smallest relevant excerpt. Attachments are optional.
+  - type: textarea
+    id: package_ids
+    attributes:
+      label: Relevant package IDs or VAR filenames
+      description: List only what is necessary. Do not attach VAR files or a complete private library list.
+      render: text
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I used an independent backup and did not test against my only copy.
+          required: true
+        - label: I removed personal, paid/private, and authentication data.
+          required: true
+        - label: I did not attach any VAR payload, full VaM log, backup manifest, or modified third-party package.
+          required: true

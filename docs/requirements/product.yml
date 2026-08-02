@@ -1,0 +1,288 @@
+# SPDX-License-Identifier: MIT
+# Canonical Specsmith requirements for VaMender.
+
+- id: REQ-001
+  title: Canonical product identity and beta posture
+  status: implemented
+  source: docs/ARCHITECTURE.md
+  description: >-
+    User-facing surfaces use VaMender. Technical identifiers may use vamender,
+    and VaM package identifiers remain AgenticCreator.VaMender. Until an
+    approved requirement changes the channel, releases are beta and require
+    production-grade safety evidence without claiming general availability.
+
+- id: REQ-002
+  title: Supported platform and host compatibility
+  status: implemented
+  source: Cargo.toml; installer/VaMender.iss; vam-plugin/meta.json
+  description: >-
+    Support 64-bit Windows and Virt-a-Mate 1.22.0.12 and install per-user
+    without administrator rights. Official CI, CodeQL, release validation,
+    packaging, and release evidence run only on GitHub-hosted Windows runners;
+    Linux and macOS are neither supported product nor validation platforms.
+
+- id: REQ-003
+  title: Read-only package inventory
+  status: implemented
+  source: src/app/cli.rs; src/app/mod.rs
+  description: >-
+    vamender check inventories the complete AddonPackages tree without
+    modifying VARs, reports invalid archives and unresolved dependencies, and
+    optionally CRC-reads every member when --deep is selected.
+
+- id: REQ-004
+  title: VaM-aware cleanup planning
+  status: implemented
+  source: src/app/mod.rs
+  description: >-
+    vamender plan combines static archive evidence with a fresh VaM
+    package-rescan log, identifies stale or absent logs, avoids describing
+    static-only references as runtime-confirmed failures, and emits a read-only
+    repair and dependency-closure plan.
+
+- id: REQ-005
+  title: Conservative metadata repair
+  status: implemented
+  source: src/app/mod.rs
+  description: >-
+    Repair missing, invalid, stale, or incomplete meta.json only from package
+    evidence or explicit user input. Never guess an unknown license or treat
+    descriptive material, morph, or parameter labels as dependencies.
+
+- id: REQ-006
+  title: Proven filename and archive repair
+  status: implemented
+  source: src/app/filename_repair.rs; src/app/mod.rs
+  description: >-
+    Correct casing, Unicode-safe identities, supported ZIP header
+    inconsistencies, and malformed filenames only when identity is
+    unambiguous. Archive byte-identical malformed duplicates only after
+    checksum comparison and whole-VAR backup.
+
+- id: REQ-007
+  title: Safe dependency relinking
+  status: implemented
+  source: src/app/dependency_closure.rs; src/app/mod.rs
+  description: >-
+    Keep exact script and plugin dependencies exact. Relink a reference to a
+    newer local version only for non-plugin content when a compatible provider
+    exists and the relevant resource payload is proven safe.
+
+- id: REQ-008
+  title: Dependency-closure isolation
+  status: implemented
+  source: src/app/dependency_closure.rs; src/app/resource_members.rs
+  description: >-
+    Expand failures through the installed dependency graph, distinguish a
+    missing package from a provider missing an internal member, and isolate
+    unusable closures without deleting scenes or substituting artistic content.
+
+- id: REQ-009
+  title: Conservative old-version retirement
+  status: implemented
+  source: src/app/mod.rs
+  description: >-
+    Archive superseded VAR versions only after reference rewrites,
+    dependency-closure analysis, payload compatibility, metadata-conflict
+    checks, and post-rewrite validation all succeed.
+
+- id: REQ-010
+  title: Verified backup before mutation
+  status: implemented
+  source: src/app/mod.rs
+  description: >-
+    Before rewriting, renaming, replacing, or archiving a VAR, copy the whole
+    original to a durable backup root outside AddonPackages, verify SHA-256,
+    and append a restore record to manifest.jsonl.
+
+- id: REQ-011
+  title: Atomic replacement and post-change validation
+  status: implemented
+  source: src/app/mod.rs
+  description: >-
+    Replace a live VAR through a validated temporary artifact and an atomic or
+    rollback-safe handoff, then recheck the archive and affected references
+    before retiring an old version or temporary source.
+
+- id: REQ-012
+  title: Checksum-verified restore
+  status: implemented
+  source: src/app/mod.rs
+  description: >-
+    Restore consumes VaMender manifest records, verifies backup checksums,
+    rejects destinations outside the selected AddonPackages root, supports
+    most-recent subsets, skips existing files by default, and preserves
+    overwritten conflicts under restore-conflicts.
+
+- id: REQ-013
+  title: Predictable user reports
+  status: implemented
+  source: src/app/mod.rs
+  description: >-
+    Every public operation emits actions_taken.txt, actions_required.txt, and
+    missing_dependencies.txt. A full run retains stage evidence under _details
+    while preserving the three top-level handoff files.
+
+- id: REQ-014
+  title: Explicit CLI mutation gates
+  status: implemented
+  source: src/app/cli.rs
+  description: >-
+    Check and plan are read-only. Repair and migrate default to dry-run and
+    require --apply plus a backup root to mutate. Run requires a backup root,
+    and help states the independent-backup warning and user responsibility.
+
+- id: REQ-015
+  title: Constrained engine bridge
+  status: implemented
+  source: src/app/bridge.rs
+  description: >-
+    Bind the local bridge to installer-selected library, backup, state, and
+    report roots; allow only supported operations; reject malformed or
+    traversal-capable request IDs; publish state atomically; and prevent
+    concurrent engines for one state root.
+
+- id: REQ-016
+  title: Sandboxed in-VaM control panel
+  status: implemented
+  source: vam-plugin/Custom/Scripts/AgenticCreator/VaMender/src
+  description: >-
+    The CLR 2 Session Plugin remains in VaM's sandbox, exposes supported engine
+    operations, blocks competing requests while busy, displays lifecycle
+    state, rescans packages after successful mutation, and never performs
+    unrestricted AddonPackages access itself.
+
+- id: REQ-017
+  title: Safe per-user installation and removal
+  status: implemented
+  source: installer/VaMender.iss; src/app/host_install.rs
+  description: >-
+    Setup validates VaM.exe and AddonPackages, requires a durable backup path
+    outside AddonPackages, installs engine/plugin without elevation, configures
+    automatic per-user startup, preserves an existing plugin before
+    replacement, and retains backups/reports on uninstall.
+
+- id: REQ-018
+  title: Content rights and privacy boundary
+  status: implemented
+  source: README.md; src; vam-plugin
+  description: >-
+    Never download, authenticate for, bypass access controls on, or infer
+    licenses for paid, private, creator-restricted, or unavailable content.
+    Local analysis does not transmit package contents or user library data.
+
+- id: REQ-019
+  title: Robust package compatibility
+  status: implemented
+  source: src/app/mod.rs; src/app/filename_repair.rs
+  description: >-
+    Handle Unicode identifiers, nested AddonPackages paths, supported ZIP
+    compression methods, VaM-sensitive casing, and the implemented
+    tar-compatible fallback without losing invalid-content evidence.
+
+- id: REQ-020
+  title: Required quality and security gates
+  status: implemented
+  source: .github/workflows/ci.yml; .github/workflows/codeql.yml
+  description: >-
+    Merge candidates pass pinned Specsmith synchronization/coverage/audit, Rust
+    formatting, SPDX validation, denied-warning and cognitive-complexity
+    Clippy, all locked Rust tests, C# compile/type-load and sandbox validation,
+    Hub VAR packaging, release build/branding/Setup validation, and CodeQL on
+    GitHub-hosted Windows runners only. No Linux or macOS job is authoritative.
+
+- id: REQ-021
+  title: Reproducible GitHub Actions beta release
+  status: implemented
+  source: .github/workflows/release.yml
+  description: >-
+    While the channel is beta, a tag uses v0.MINOR.PATCH and matches Cargo,
+    plugin, and installer versions with a dated changelog entry. Windows-only
+    GitHub Actions builds, packages, checksums, retains as workflow artifacts,
+    and uploads the
+    executable, Hub VAR, Setup, and portable ZIP to a GitHub prerelease from the
+    tagged commit. For release-only text changes, Actions verifies the approved
+    CLR 2 DLL baseline hash and a normalized plugin-source hash before applying
+    only equal-length version, beta URL, and Setup wording stamps. Any other
+    plugin change is rejected until the DLL is rebuilt and validated against
+    the supported VaM installation. Maintainer workstations are not release
+    authorities.
+
+- id: REQ-022
+  title: Beta acceptance evidence
+  status: partial
+  source: docs/TESTS.md; docs/governance/LIFECYCLE.md
+  description: >-
+    Beta promotion requires green automated gates plus documented
+    supported-environment smoke evidence for install, read-only check/plan, a
+    backed-up mutation, VaM rescan, report review, restore, and uninstall. An
+    unexecuted environment-dependent check remains a release blocker.
+
+- id: REQ-023
+  title: Maintainer and user documentation
+  status: implemented
+  source: README.md; CHANGELOG.md; SUPPORT.md; SECURITY.md; CONTRIBUTING.md; MAINTAINERS.md; DISCLAIMER.md
+  description: >-
+    User and maintainer documents remain consistent with the VaMender name,
+    beta channel, supported platform, safety model, content-rights boundary,
+    install/restore workflow, and independent-project disclosure.
+
+- id: REQ-024
+  title: Privacy-first support reporting
+  status: implemented
+  source: src/app/support_report.rs; .github/ISSUE_TEMPLATE/support_report.yml
+  description: >-
+    VaMender provides a read-only support-report command that extracts only
+    package-related diagnostics into a local review bundle, omits absolute
+    paths, full VaM logs, VAR payloads, manifests, credentials, and private
+    URLs, includes a complete VAR list only by explicit opt-in, never uploads
+    data automatically, and opens GitHub only after explicit review consent.
+
+- id: REQ-025
+  title: VaM Hub resource compliance
+  status: partial
+  source: docs/VAM-HUB-RESOURCE.md; tools/package-vam-plugin.ps1; vam-plugin/meta.json
+  description: >-
+    The Hub resource uses Plugins + Scripts, hosts the primary VAR on the Hub,
+    packages only original VaMender content with no embedded executable or
+    dependencies, declares CC BY with linked creator credit, accurately
+    discloses the sandboxed plugin and external companion engine, avoids direct
+    external file links in the description, and remains a draft until the VAR
+    Health Report is clean and moderators confirm the installer/engine model.
+
+- id: REQ-026
+  title: Defined path to v1.0.0
+  status: planned
+  source: docs/ROADMAP.md; docs/governance/LIFECYCLE.md
+  description: >-
+    VaMender remains beta until the documented v1.0.0 gates are met for
+    repeated supported-environment safety evidence, restore and rollback,
+    installer/plugin compatibility, security and signing posture, privacy-safe
+    support, Hub compliance, documentation, and reproducible GitHub Actions
+    release artifacts.
+
+- id: REQ-027
+  title: Pseudonymous maintainer identity
+  status: implemented
+  source: AGENTS.md; MAINTAINERS.md; tools/configure-maintainer-identity.ps1; tools/check-maintainer-identity.ps1; .githooks/pre-push; .github/workflows/ci.yml; .github/workflows/release.yml
+  description: >-
+    Project-authored public commits and annotated release tags use
+    TheAgenticCreator
+    <312204356+TheAgenticCreatorDev@users.noreply.github.com> rather than a
+    maintainer's legal name, personal account name, or personal email.
+    Repository-local configuration, a pre-push guard, CI, and release gates
+    verify the metadata. Maintainer GitHub operations authenticate as
+    TheAgenticCreatorDev or an approved organization App because commit
+    metadata cannot conceal GitHub's authenticated event actor.
+- id: REQ-028
+  title: Windows tray-host lifecycle
+  status: implemented
+  source: src/app/tray_host.rs; src/app/bridge.rs; src/app/host_install.rs; README.md
+  description: >-
+    The per-user Windows host presents a VaMender notification-area icon,
+    starts the constrained engine without a console or external script, keeps
+    it available across ordinary VaM launches, launches VaM on request, opens
+    report and backup folders, reports product/version and safety information,
+    toggles Start with Windows, and exits cooperatively after any in-flight
+    operation finishes. Setup enables Start with Windows by default, and VaM's
+    plugin sandbox is not used to spawn or terminate the host.

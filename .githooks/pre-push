@@ -1,0 +1,31 @@
+#!/bin/sh
+# SPDX-License-Identifier: MIT
+
+set -eu
+zero="0000000000000000000000000000000000000000"
+checker="tools/check-maintainer-identity.ps1"
+
+if command -v pwsh >/dev/null 2>&1; then
+  powershell_command="pwsh"
+  execution_policy=""
+elif command -v powershell.exe >/dev/null 2>&1; then
+  powershell_command="powershell.exe"
+  execution_policy="-ExecutionPolicy Bypass"
+else
+  echo "VaMender identity guard requires PowerShell." >&2
+  exit 1
+fi
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$local_sha" = "$zero" ]; then
+    continue
+  fi
+  if [ "$remote_sha" = "$zero" ]; then
+    revision="$local_sha"
+  else
+    revision="$remote_sha..$local_sha"
+  fi
+  # shellcheck disable=SC2086
+  "$powershell_command" -NoProfile $execution_policy \
+    -File "$checker" -Revision "$revision"
+done

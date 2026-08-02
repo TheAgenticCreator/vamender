@@ -1,0 +1,6 @@
+src\DefaultSceneLauncher.cs
+src\EngineClient.cs
+src\MomentaryAction.cs
+src\NativePackageService.cs
+src\PluginUiNavigator.cs
+src\VaMender.cs

@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: MIT
+name: Documentation or usability problem
+description: Report unclear instructions, misleading output, or a difficult command workflow.
+title: "[Docs/UX]: "
+labels: ["documentation", "triage"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Installation or checksum verification
+        - Backup or restore instructions
+        - Command help
+        - Report wording
+        - Support report or privacy instructions
+        - VaM Hub resource or packaging guidance
+        - Cleanup workflow
+        - Contributing or release documentation
+        - Other documentation
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Page, command, or report
+      placeholder: "README: Recommended workflow, or `vamender repair --help`"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What was unclear or misleading?
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Suggested wording or behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I removed personal paths, paid/private content, credentials, and private URLs.
+          required: true

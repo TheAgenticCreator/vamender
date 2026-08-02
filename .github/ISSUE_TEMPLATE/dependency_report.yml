@@ -1,0 +1,87 @@
+# SPDX-License-Identifier: MIT
+name: Dependency decision report
+description: Report a missing, retained, relinked, archived, or quarantine decision that appears incorrect.
+title: "[Dependency]: "
+labels: ["dependency-analysis", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep the original package and all VaMender backups until this is resolved.
+        Use redacted text evidence only. Never upload paid/private VARs, personal logs,
+        credentials, backup manifests, or modified third-party packages.
+        Prefer `vamender support-report <AddonPackages> --vam-log <output_log.txt>`;
+        review the local ZIP before attaching it.
+  - type: input
+    id: version
+    attributes:
+      label: VaMender version
+      description: Copy the output of `vamender --version`.
+      placeholder: "vamender 0.1.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: decision
+    attributes:
+      label: Decision that appears incorrect
+      options:
+        - Missing dependency
+        - Dependency removed from meta.json
+        - Dependency added to meta.json
+        - Version relink
+        - Old version retained
+        - Old version archived
+        - Quarantine candidate
+        - VaM log mismatch
+    validations:
+      required: true
+  - type: input
+    id: package
+    attributes:
+      label: Affected package ID
+      placeholder: "Creator.Package.1"
+    validations:
+      required: true
+  - type: textarea
+    id: installed_versions
+    attributes:
+      label: Relevant installed package IDs
+      description: List only package IDs and versions; do not attach packages.
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: rescan
+    attributes:
+      label: Was VaM rescanned immediately before this run?
+      options:
+        - "Yes, VaM was rescanned and then closed"
+        - "No"
+        - "Unsure"
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Reviewed support bundle or relevant redacted lines
+      description: Drag the reviewed `vamender-support-bundle.zip` here, or include the smallest excerpt that shows the decision. Do not upload the complete VaM log.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected decision
+      description: Explain which package should be used or retained and why.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety and privacy confirmation
+      options:
+        - label: I preserved the original package and VaMender backup.
+          required: true
+        - label: This report contains no paid/private files, credentials, personal paths, or private URLs.
+          required: true
+        - label: I did not attach a VAR file, backup manifest, complete VaM log, or modified third-party package.
+          required: true
