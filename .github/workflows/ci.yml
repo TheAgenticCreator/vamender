@@ -28,7 +28,7 @@ jobs:
         shell: pwsh
         run: ./tools/check-maintainer-identity.ps1 -Revision HEAD
       - name: Install governance runtime
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Install Specsmith
@@ -45,7 +45,7 @@ jobs:
           toolchain: 1.88.0
           components: rustfmt, clippy
       - name: Install plugin validation SDK
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "8.0.x"
       - name: Check formatting

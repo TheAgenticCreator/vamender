@@ -33,7 +33,7 @@ jobs:
           toolchain: 1.88.0
           components: rustfmt, clippy
       - name: Install plugin validation SDK
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "8.0.x"
       - name: Validate version and changelog
