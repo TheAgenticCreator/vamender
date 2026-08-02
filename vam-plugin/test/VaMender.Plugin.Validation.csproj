@@ -1,0 +1,17 @@
+<!-- SPDX-License-Identifier: MIT -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>5</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AssemblyName>VaMender.Plugin.Validation</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="PluginSecurityValidation.cs" />
+    <Compile Include="VaMStubs.cs" />
+    <Compile Include="..\Custom\Scripts\AgenticCreator\VaMender\src\*.cs" />
+  </ItemGroup>
+</Project>

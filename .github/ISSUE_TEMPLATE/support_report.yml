@@ -1,0 +1,86 @@
+# SPDX-License-Identifier: MIT
+name: VaMender support report
+description: Share a reviewed, privacy-safe diagnostic bundle or package issue list.
+title: "[Support]: "
+labels: ["support-report", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create a local report with:
+
+        `vamender support-report <AddonPackages> --vam-log <output_log.txt>`
+
+        Add `--include-var-list` only when the complete package-name list is needed
+        and you consent to disclose it. VaMender never uploads diagnostics. Review
+        `README_FIRST.txt` and every file before attaching the ZIP.
+
+        Never attach VAR payloads, full VaM logs, backup manifests, absolute paths,
+        credentials, private URLs, or modified third-party packages.
+  - type: input
+    id: version
+    attributes:
+      label: VaMender version
+      description: Copy `vamender --version`.
+      placeholder: "vamender 0.1.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: What needs help?
+      options:
+        - Missing package or dependency closure
+        - Invalid or corrupt VAR
+        - Missing internal resource
+        - Filename or casing repair
+        - Metadata repair
+        - Migration or retained old version
+        - Backup or restore
+        - VaM log mismatch
+        - Installer, engine, or Session Plugin
+        - Other package-related issue
+    validations:
+      required: true
+  - type: dropdown
+    id: rescan
+    attributes:
+      label: VaM package-rescan status
+      options:
+        - VaM was rescanned immediately before creating the report
+        - The report says the VaM log may be stale
+        - VaM log was unavailable
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: bundle
+    attributes:
+      label: Reviewed VaMender support bundle
+      description: Drag `vamender-support-bundle.zip` here after reviewing it. You may instead paste a minimal excerpt. This is optional if the description is sufficient.
+  - type: textarea
+    id: package_ids
+    attributes:
+      label: Relevant package IDs or VAR filenames
+      description: Include the smallest useful list. Do not paste a complete library inventory unless requested and reviewed.
+      render: text
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened, and what result did you expect?
+      description: Include the command or in-VaM action and whether it was read-only or write-capable.
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Safety, rights, and privacy confirmation
+      options:
+        - label: I reviewed every attached file and consent to sharing the package identifiers it contains.
+          required: true
+        - label: I removed absolute paths, credentials, private URLs, and information I do not want public.
+          required: true
+        - label: I did not attach VAR payloads, full VaM logs, backup manifests, or modified third-party packages.
+          required: true
+        - label: I preserved my independent backup and original packages.
+          required: true
