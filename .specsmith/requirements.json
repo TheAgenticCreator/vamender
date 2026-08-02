@@ -289,7 +289,7 @@
     "id": "REQ-027",
     "version": 1,
     "title": "Pseudonymous maintainer identity",
-    "description": "Project-authored public commits and annotated release tags use TheAgenticCreator <312204356+TheAgenticCreatorDev@users.noreply.github.com> rather than a maintainer's legal name, personal account name, or personal email. Repository-local configuration, a pre-push guard, CI, and release gates verify the metadata. Maintainer GitHub operations authenticate as TheAgenticCreatorDev or an approved organization App because commit metadata cannot conceal GitHub's authenticated event actor.",
+    "description": "Project-authored public commits and annotated release tags use TheAgenticCreator <312204356+TheAgenticCreatorDev@users.noreply.github.com> rather than a maintainer's legal name, personal account name, or personal email. Repository-local configuration, a pre-push guard, CI, and release gates verify the metadata. Pull-request CI validates the real head history rather than GitHub's temporary synthetic merge commit. Maintainer GitHub operations authenticate as TheAgenticCreatorDev or an approved organization App because commit metadata cannot conceal GitHub's authenticated event actor.",
     "source": "AGENTS.md; MAINTAINERS.md; tools/configure-maintainer-identity.ps1; tools/check-maintainer-identity.ps1; .githooks/pre-push; .github/workflows/ci.yml; .github/workflows/release.yml",
     "status": "implemented",
     "test_ids": [

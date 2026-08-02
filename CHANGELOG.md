@@ -31,6 +31,8 @@ and this project adheres to
   current installations with an upgrade-compatible fallback for older builds.
 - Checksum-verify the installed Session Plugin and back up and retire older
   VaMender plugin revisions instead of leaving duplicate revisions installed.
+- Validate the real pull-request head in the pseudonymous identity gate instead
+  of rejecting GitHub's temporary merge commit.
 
 ### Security
 

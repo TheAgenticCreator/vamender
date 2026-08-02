@@ -30,7 +30,11 @@ jobs:
           fetch-depth: 0
       - name: Check pseudonymous maintainer history
         shell: pwsh
-        run: ./tools/check-maintainer-identity.ps1 -Revision HEAD
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          $revision = if ($env:PR_HEAD_SHA) { $env:PR_HEAD_SHA } else { "HEAD" }
+          ./tools/check-maintainer-identity.ps1 -Revision $revision
       - name: Install governance runtime
         uses: actions/setup-python@v6
         with:
@@ -124,7 +128,11 @@ jobs:
           fetch-depth: 0
       - name: Check pseudonymous maintainer history
         shell: pwsh
-        run: ./tools/check-maintainer-identity.ps1 -Revision HEAD
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          $revision = if ($env:PR_HEAD_SHA) { $env:PR_HEAD_SHA } else { "HEAD" }
+          ./tools/check-maintainer-identity.ps1 -Revision $revision
       - name: Stamp the validated CLR 2 plugin baseline
         shell: pwsh
         run: |

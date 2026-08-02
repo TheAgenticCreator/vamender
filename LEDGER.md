@@ -143,3 +143,13 @@
 - **Changes**: Added busy-aware cooperative external shutdown and lock cleanup, a hidden `stop-host` command, an upgrade-compatible pre-install fallback for older engines, checksum verification of the installed Session Plugin, backup-first retirement of older VaMender plugin revisions, and a sanitized seven-screen installation guide.
 - **Evidence**: Formatting, strict Clippy, and all 20 Rust tests pass. Inno Setup 6.7.3 compiled the corrected Setup. A live running-host upgrade completed in approximately two seconds with Restart Manager reporting no file users; installed executable and revision-2 VAR hashes matched their build artifacts; revision 1 was copied to durable `install-history` before removal; exactly one restarted engine owned the lock and advanced `heartbeat.txt`; Start with Windows remained registered. A synthetic RUNNING state made `stop-host` fail closed without terminating the engine; idle shutdown then exited cooperatively, removed the lock, preserved startup registration, and no-argument launch restored exactly one healthy engine.
 - **Status**: local supported-Windows installer regression passed; fresh CI/CodeQL and remaining disposable-library/VaM acceptance evidence are required; release prohibited
+
+## 2026-08-02 — pull-request identity gate correction
+
+- **Author**: TheAgenticCreator
+- **Type**: CI identity diagnosis and privacy hardening
+- **REQs affected**: REQ-020, REQ-027
+- **Root cause**: Pull-request checkout targets GitHub's temporary merge commit by default. The first PR run therefore rejected GitHub-generated author/committer metadata before any build step even though both project-authored commits passed the local canonical identity checker.
+- **Changes**: Both Windows CI jobs now validate `github.event.pull_request.head.sha` for pull requests and `HEAD` for push/dispatch events. The failed run containing the temporary merge metadata must be deleted after replacement checks are registered.
+- **Evidence required**: YAML parse, simulated pull-request and push revision selection, identity validation of the real branch history, green replacement Windows CI/CodeQL, and failed-run deletion verification.
+- **Status**: correction implemented; replacement CI and privacy cleanup pending; release prohibited

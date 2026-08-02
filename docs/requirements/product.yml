@@ -273,9 +273,10 @@
     <312204356+TheAgenticCreatorDev@users.noreply.github.com> rather than a
     maintainer's legal name, personal account name, or personal email.
     Repository-local configuration, a pre-push guard, CI, and release gates
-    verify the metadata. Maintainer GitHub operations authenticate as
-    TheAgenticCreatorDev or an approved organization App because commit
-    metadata cannot conceal GitHub's authenticated event actor.
+    verify the metadata. Pull-request CI validates the real head history rather
+    than GitHub's temporary synthetic merge commit. Maintainer GitHub operations
+    authenticate as TheAgenticCreatorDev or an approved organization App because
+    commit metadata cannot conceal GitHub's authenticated event actor.
 - id: REQ-028
   title: Windows tray-host lifecycle
   status: implemented

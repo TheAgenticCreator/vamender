@@ -161,7 +161,7 @@
   title: Pseudonymous maintainer history gate
   requirement_id: REQ-027
   type: build
-  verification_method: Run tools/check-maintainer-identity.ps1 across complete branch history and the annotated release tag, verify a synthetic non-TheAgenticCreator author or committer is rejected, and confirm the public repository event actor is TheAgenticCreatorDev or an approved organization GitHub App before publication.
+  verification_method: Run tools/check-maintainer-identity.ps1 across complete branch history and the annotated release tag, verify a synthetic non-TheAgenticCreator author or committer is rejected, verify pull-request CI selects the real head SHA instead of GitHub's temporary merge commit, and confirm the public repository event actor is TheAgenticCreatorDev or an approved organization GitHub App before publication.
 - id: TEST-028
   title: Windows tray-host lifecycle
   requirement_id: REQ-028
