@@ -153,3 +153,12 @@
 - **Changes**: Both Windows CI jobs now validate `github.event.pull_request.head.sha` for pull requests and `HEAD` for push/dispatch events. The failed run containing the temporary merge metadata must be deleted after replacement checks are registered.
 - **Evidence required**: YAML parse, simulated pull-request and push revision selection, identity validation of the real branch history, green replacement Windows CI/CodeQL, and failed-run deletion verification.
 - **Status**: correction implemented; replacement CI and privacy cleanup pending; release prohibited
+
+## 2026-08-02 — installer, native UI, and disposable-library acceptance
+
+- **Author**: TheAgenticCreator
+- **Type**: supported-Windows acceptance evidence and documentation
+- **REQs affected**: REQ-001, REQ-007, REQ-012, REQ-017, REQ-020, REQ-021, REQ-022, REQ-028
+- **Changes**: Added tightly cropped real tray and in-VaM control-panel screenshots, visibly redacted personal filesystem paths, and rendered before/after images sourced directly from an isolated synthetic library's VaMender reports.
+- **Evidence**: The final Setup upgraded a running idle tray host without Restart Manager intervention, matched executable and plugin build hashes, preserved startup registration, and restarted exactly one lock-owning host with an advancing heartbeat. The installed tray launched VaM; the main-menu Open VaMender control opened the native Session Plugin UI without loading a scene. A three-VAR disposable library produced one safe exact-version relink and one missing-dependency quarantine plan; automatic cleanup checksum-backed up affected packages, rewrote both metadata and content references, archived the broken dependent, and completed with an empty missing-dependency report. Full manifest restore then recovered both the original reference and archived scene while preserving overwritten files under restore-conflicts. VaM was closed normally, all raw captures were deleted, and no live library VAR was changed for the demonstration.
+- **Status**: local installer, tray, native UI, disposable cleanup, and restore acceptance passed; PR CI/CodeQL must pass after documentation changes; release prohibited

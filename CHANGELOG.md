@@ -12,6 +12,8 @@ and this project adheres to
 
 ### Added
 
+- Add genuine, privacy-sanitized installer, tray, and in-VaM screenshots plus
+  actual before/after reports from an isolated synthetic repair demonstration.
 - Add a Windows notification-area host with Launch VaM, report/backup folder
   shortcuts, Start with Windows toggle, version/safety details, and safe Exit.
 - Add a Start-menu shortcut and no-argument installed-executable restart path

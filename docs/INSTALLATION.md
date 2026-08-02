@@ -60,5 +60,17 @@ Plugins**, and confirm its status says **VAMENDER — ENGINE ONLINE**.
 
 ![VaMender installation complete](images/installer/07-complete.png)
 
+Right-click the notification-area icon to confirm the engine is ready and to
+open reports, backups, About, startup settings, or the safe Exit command.
+
+![VaMender notification-area menu](images/interface/01-tray-menu.png)
+
+In VaM, choose **Open VaMender** and confirm the native Session Plugin control
+panel reports that the engine is online.
+
+![VaMender native control panel](images/interface/02-vam-control-panel.png)
+
+Personal filesystem paths are explicitly redacted in the control-panel image.
+
 The screenshots show a development build; the version in the title bar may be
 newer in the published installer.

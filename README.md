@@ -131,6 +131,8 @@ Right-click the VaMender shield in the Windows notification area to:
 - choose **Exit VaMender**. Exit stops accepting new work and waits for any
   active backup/repair operation to finish before shutting down safely.
 
+![VaMender notification-area menu](docs/images/interface/01-tray-menu.png)
+
 Closing VaM does not close VaMender. This is intentional: VaM's plugin sandbox
 cannot safely launch or supervise an external package-repair engine, and the
 host must already be available when VaM starts. If you exit it accidentally,
@@ -169,9 +171,10 @@ for detailed review, scripting, and troubleshooting.
 Once loaded, open VaMender from Session Plugin Custom UI or from the themed
 **Open VaMender** button beside **Open Default Scene**.
 
-<!-- Screenshot placeholder: Session Plugins with the VaMender DLL selected. -->
+![VaMender control panel running natively in VaM](docs/images/interface/02-vam-control-panel.png)
 
-<!-- Screenshot placeholder: VaMender Custom UI showing ENGINE ONLINE. -->
+Personal filesystem paths are explicitly redacted in the documentation image;
+the operation controls and status are genuine application output.
 
 #### Run a safe first workflow
 
@@ -212,7 +215,13 @@ Plugin reports are stored under
 same top-level `actions_taken.txt`, `actions_required.txt`, and
 `missing_dependencies.txt` files as the CLI.
 
-<!-- Screenshot placeholder: completed cleanup plan and report location. -->
+The following before/after images are rendered directly from VaMender's actual
+report files for an isolated three-VAR synthetic library. No live library VARs
+or private package names were used.
+
+![Disposable demo cleanup plan](docs/images/demo/01-before-plan.png)
+
+![Disposable demo after automatic cleanup](docs/images/demo/02-after-cleanup.png)
 
 The **Open Package Manager** and **Rescan Packages in VaM** buttons are VaM
 convenience helpers, not VaMender repair operations. Restore actions can replace

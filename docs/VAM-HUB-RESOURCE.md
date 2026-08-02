@@ -204,6 +204,14 @@ Link and Alternative Support URL on this resource.
 
 Recommended gallery, using real application output and synthetic package data:
 
+Project-ready source images:
+
+- `docs/images/interface/02-vam-control-panel.png`
+- `docs/images/demo/01-before-plan.png`
+- `docs/images/demo/02-after-cleanup.png`
+- `docs/images/installer/03-vam-folder.png`
+- `docs/images/installer/04-backup-folder.png`
+
 1. A 16:9 hero screenshot showing the VaMender Session Plugin Custom UI in
    VaM's default or empty scene.
 2. The Check or Plan result with package counts and the read-only/no-changes
