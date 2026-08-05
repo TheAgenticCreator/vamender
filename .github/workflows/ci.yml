@@ -36,7 +36,7 @@ jobs:
           $revision = if ($env:PR_HEAD_SHA) { $env:PR_HEAD_SHA } else { "HEAD" }
           ./tools/check-maintainer-identity.ps1 -Revision $revision
       - name: Install governance runtime
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Install Specsmith
@@ -53,7 +53,7 @@ jobs:
           toolchain: 1.88.0
           components: rustfmt, clippy
       - name: Install plugin validation SDK
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "8.0.x"
       - name: Check formatting
