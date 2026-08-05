@@ -342,8 +342,8 @@ pub(super) fn set_start_with_windows(
 
 const PLUGIN_CREATOR: &str = "AgenticCreator";
 const PLUGIN_PACKAGE: &str = "VaMender";
-const PLUGIN_REVISION: u32 = 2;
-const PLUGIN_FILENAME: &str = "AgenticCreator.VaMender.2.var";
+const PLUGIN_REVISION: u32 = 1;
+const PLUGIN_FILENAME: &str = "AgenticCreator.VaMender.1.var";
 
 fn preserve_plugin(package: &Path, backup: &Path) -> Result<PathBuf> {
     let name = package.file_name().context("plugin VAR has no filename")?;
@@ -579,7 +579,7 @@ mod tests {
     }
 
     #[test]
-    fn preserves_existing_plugin_and_retires_older_revision() -> Result<()> {
+    fn preserves_and_replaces_existing_current_plugin() -> Result<()> {
         let temporary = tempfile::tempdir()?;
         let source_root = temporary.path().join("release");
         let packages = temporary.path().join("AddonPackages");
@@ -587,17 +587,14 @@ mod tests {
         fs::create_dir_all(&source_root)?;
         fs::create_dir_all(&packages)?;
         fs::create_dir_all(&backup)?;
-        let name = "AgenticCreator.VaMender.2.var";
+        let name = "AgenticCreator.VaMender.1.var";
         let source = source_root.join(name);
         fs::write(&source, b"new")?;
         fs::write(packages.join(name), b"old")?;
-        let old_name = "AgenticCreator.VaMender.1.var";
-        fs::write(packages.join(old_name), b"older revision")?;
 
         install_plugin(&source, &packages, &backup)?;
 
         assert_eq!(fs::read(packages.join(name))?, b"new");
-        assert!(!packages.join(old_name).exists());
         let old_hash = Sha256::digest(b"old");
         let old_hash = format!("{old_hash:x}");
         assert_eq!(
@@ -607,16 +604,6 @@ mod tests {
                     .join(format!("{old_hash}-{name}")),
             )?,
             b"old"
-        );
-        let older_hash = Sha256::digest(b"older revision");
-        let older_hash = format!("{older_hash:x}");
-        assert_eq!(
-            fs::read(
-                backup
-                    .join("install-history")
-                    .join(format!("{older_hash}-{old_name}")),
-            )?,
-            b"older revision"
         );
         Ok(())
     }

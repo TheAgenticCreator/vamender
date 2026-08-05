@@ -104,7 +104,7 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 ## TEST-012
 - **Title**: Hub VAR packaging validation
 - **Type**: build
-- **Description**: Package `AgenticCreator.VaMender.2.var` and validate required metadata and payload layout.
+- **Description**: Package `AgenticCreator.VaMender.1.var` and validate required metadata and payload layout.
 - **Verification**: `tools/package-vam-plugin.ps1` exits 0.
 - **Covers**: REQ-001, REQ-016, REQ-020, REQ-021
 - **Status**: Automated
@@ -154,10 +154,10 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 ## TEST-018
 - **Title**: Disposable-library CLI smoke test
 - **Type**: e2e
-- **Description**: On a disposable copy of a representative AddonPackages library, run check, deep check, plan, one applied repair or migration, report review, and checksum-verified restore.
-- **Verification**: VaM loads the restored library after a fresh rescan and the evidence record includes paths, hashes, reports, and observed result.
+- **Description**: Run `tools/run-release-scenarios.ps1` against synthetic disposable libraries, covering clean and deep inventory, missing dependencies, VaM-log-aware planning, metadata repair, corrupt archives, conservative migration, broken-library quarantine, support-report generation, and checksum-verified restore.
+- **Verification**: Every scenario returns exit code 0, report-level findings match the fixture, mutation cases create backup manifests before changes, and the evidence record includes reports, hashes, restore output, and observed result. VaM must load a restored representative library after a fresh rescan during manual beta acceptance.
 - **Covers**: REQ-003, REQ-004, REQ-005, REQ-006, REQ-007, REQ-008, REQ-009, REQ-010, REQ-011, REQ-012, REQ-013, REQ-014, REQ-019, REQ-022
-- **Status**: Manual required for beta release
+- **Status**: Manual accepted locally on 2026-08-04; final tagged CI evidence remains required
 
 ## TEST-019
 - **Title**: Installer and uninstall smoke test
@@ -165,15 +165,15 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 - **Description**: Install as a standard Windows user, reject an unsafe backup path, confirm automatic engine startup and plugin installation, then uninstall and confirm backups/reports remain.
 - **Verification**: The procedure completes without elevation and records retained user data and removed application components.
 - **Covers**: REQ-002, REQ-017, REQ-022
-- **Status**: Manual required for beta release
+- **Status**: Manual accepted locally on 2026-08-05 with install, uninstall-retention, and reinstall evidence; final tagged CI evidence remains required
 
 ## TEST-020
 - **Title**: Live VaM plugin workflow
 - **Type**: e2e
-- **Description**: In VaM 1.22.0.12, load the Session Plugin, run check/plan and one backed-up mutation, observe busy-state locking and terminal status, and confirm an automatic package rescan.
+- **Description**: In verified VaM 1.22.0.13, load the Session Plugin, run check/plan and one backed-up mutation, observe busy-state locking and terminal status, and confirm an automatic package rescan. Record 1.22.0.12 as expected but untested based on the plugin impact surface.
 - **Verification**: VaM remains stable, the engine reports match the requested operation, and the post-operation rescan reflects the result.
 - **Covers**: REQ-015, REQ-016, REQ-022
-- **Status**: Manual required for beta release
+- **Status**: Manual accepted locally on 2026-08-05 using VaM 1.22.0.13 and a disposable fixture; VaM 1.22.0.12 remains expected but untested
 
 ## TEST-021
 - **Title**: Rights and no-network review

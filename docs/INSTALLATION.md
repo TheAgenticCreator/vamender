@@ -68,7 +68,7 @@ open reports, backups, About, startup settings, or the safe Exit command.
 In VaM, choose **Open VaMender** and confirm the native Session Plugin control
 panel reports that the engine is online.
 
-![VaMender native control panel](images/interface/02-vam-control-panel.png)
+![VaMender native control panel](images/interface/04-vam-session-plugin-panel.png)
 
 Personal filesystem paths are explicitly redacted in the control-panel image.
 

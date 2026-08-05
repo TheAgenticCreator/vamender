@@ -187,7 +187,7 @@ pub(super) struct InstallHostArgs {
     /// Durable backup directory outside AddonPackages
     #[arg(long)]
     pub(super) backup: PathBuf,
-    /// Optional AgenticCreator.VaMender.2.var to install
+    /// Optional AgenticCreator.VaMender.1.var to install
     #[arg(long)]
     pub(super) plugin_var: Option<PathBuf>,
 }

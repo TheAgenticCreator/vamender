@@ -56,6 +56,14 @@ your users, and contribute ideas or improvements back to this project.
 > choosing a safe backup destination, preserving access to paid/private
 > content, and verifying the result in VaM.
 
+## VaM compatibility
+
+The Session Plugin has been tested with VaM `1.22.0.13` on Windows x64. VaM
+`1.22.0.12` is expected to work because the plugin uses stable CLR 2, Session
+Plugin, secure-file, and Unity UI surfaces, but that version has not been
+directly tested. See [`docs/VAM-COMPATIBILITY.md`](docs/VAM-COMPATIBILITY.md)
+for the exact compatibility basis and limits.
+
 ## Safety model
 
 - VaMender can operate while VaM is open. The in-VaM control panel submits
@@ -160,7 +168,7 @@ for detailed review, scripting, and troubleshooting.
    `AddonPackages`.
 2. Start VaM and open **Session Plugins**.
 3. Select **Add Plugin**, then choose
-   `AgenticCreator.VaMender.2:/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll`.
+   `AgenticCreator.VaMender.1:/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll`.
 4. Open the plugin's **Custom UI**. No scene or atom is required.
 5. Confirm the status reads **VAMENDER — ENGINE ONLINE**. If it reads
    **ENGINE OFFLINE**, select **VaMender: Refresh Engine Status**. Repair or
@@ -171,7 +179,7 @@ for detailed review, scripting, and troubleshooting.
 Once loaded, open VaMender from Session Plugin Custom UI or from the themed
 **Open VaMender** button beside **Open Default Scene**.
 
-![VaMender control panel running natively in VaM](docs/images/interface/02-vam-control-panel.png)
+![VaMender control panel running natively in VaM](docs/images/interface/04-vam-session-plugin-panel.png)
 
 Personal filesystem paths are explicitly redacted in the documentation image;
 the operation controls and status are genuine application output.
@@ -349,7 +357,7 @@ native plugin against an installed VaM copy, then build the Hub-ready VAR:
 ```powershell
 .\tools\build-vam-plugin.ps1 -VaMPath "D:\VaM"
 .\tools\package-vam-plugin.ps1 `
-  -OutputPath .\dist\AgenticCreator.VaMender.2.var
+  -OutputPath .\dist\AgenticCreator.VaMender.1.var
 ```
 
 The build script deliberately uses the .NET Framework 3.5 compiler because

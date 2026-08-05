@@ -14,7 +14,7 @@
     "id": "REQ-002",
     "version": 1,
     "title": "Supported platform and host compatibility",
-    "description": "Support 64-bit Windows and Virt-a-Mate 1.22.0.12 and install per-user without administrator rights. Official CI, CodeQL, release validation, packaging, and release evidence run only on GitHub-hosted Windows runners; Linux and macOS are neither supported product nor validation platforms.",
+    "description": "Support 64-bit Windows and the verified Virt-a-Mate 1.22.0.13 runtime and install per-user without administrator rights. VaM 1.22.0.12 is expected to work based on the documented plugin impact surface but is untested. Official CI, CodeQL, release validation, packaging, and release evidence run only on GitHub-hosted Windows runners; Linux and macOS are neither supported product nor validation platforms.",
     "source": "Cargo.toml; installer/VaMender.iss; vam-plugin/meta.json",
     "status": "implemented",
     "test_ids": [

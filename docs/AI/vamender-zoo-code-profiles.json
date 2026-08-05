@@ -1,0 +1,94 @@
+{
+  "providerProfiles": {
+    "currentApiConfigName": "VaMender - Local Fast",
+    "apiConfigs": {
+      "VaMender - Local Fast": {
+        "id": "vamender-local-fast",
+        "apiProvider": "litellm",
+        "litellmBaseUrl": "http://127.0.0.1:4100",
+        "litellmApiKey": "dummy-key",
+        "litellmModelId": "local-fast",
+        "litellmUsePromptCache": false,
+        "includeMaxTokens": true,
+        "todoListEnabled": true,
+        "modelTemperature": 0.2,
+        "modelMaxTokens": 16384,
+        "modelMaxThinkingTokens": 4096,
+        "enableReasoningEffort": true,
+        "consecutiveMistakeLimit": 3,
+        "rateLimitSeconds": 0
+      },
+      "VaMender - Local Code": {
+        "id": "vamender-local-code",
+        "apiProvider": "litellm",
+        "litellmBaseUrl": "http://127.0.0.1:4100",
+        "litellmApiKey": "dummy-key",
+        "litellmModelId": "local-code",
+        "litellmUsePromptCache": false,
+        "includeMaxTokens": true,
+        "todoListEnabled": true,
+        "modelTemperature": 0.1,
+        "modelMaxTokens": 32768,
+        "enableReasoningEffort": false,
+        "consecutiveMistakeLimit": 3,
+        "rateLimitSeconds": 0
+      },
+      "VaMender - Local Vision": {
+        "id": "vamender-local-vision",
+        "apiProvider": "litellm",
+        "litellmBaseUrl": "http://127.0.0.1:4100",
+        "litellmApiKey": "dummy-key",
+        "litellmModelId": "local-vision",
+        "litellmUsePromptCache": false,
+        "includeMaxTokens": true,
+        "todoListEnabled": true,
+        "modelTemperature": 0.15,
+        "modelMaxTokens": 16384,
+        "modelMaxThinkingTokens": 4096,
+        "enableReasoningEffort": true,
+        "consecutiveMistakeLimit": 3,
+        "rateLimitSeconds": 0
+      },
+      "VaMender - Cloud Plus": {
+        "id": "vamender-cloud-plus",
+        "apiProvider": "litellm",
+        "litellmBaseUrl": "http://127.0.0.1:4100",
+        "litellmApiKey": "dummy-key",
+        "litellmModelId": "cloud-qwen-plus",
+        "litellmUsePromptCache": true,
+        "includeMaxTokens": true,
+        "todoListEnabled": true,
+        "modelTemperature": 0.15,
+        "modelMaxTokens": 32768,
+        "modelMaxThinkingTokens": 8192,
+        "enableReasoningEffort": true,
+        "consecutiveMistakeLimit": 3,
+        "rateLimitSeconds": 0
+      },
+      "VaMender - Cloud Max": {
+        "id": "vamender-cloud-max",
+        "apiProvider": "litellm",
+        "litellmBaseUrl": "http://127.0.0.1:4100",
+        "litellmApiKey": "dummy-key",
+        "litellmModelId": "cloud-qwen-max",
+        "litellmUsePromptCache": true,
+        "includeMaxTokens": true,
+        "todoListEnabled": true,
+        "modelTemperature": 0.1,
+        "modelMaxTokens": 65536,
+        "modelMaxThinkingTokens": 16384,
+        "enableReasoningEffort": true,
+        "consecutiveMistakeLimit": 3,
+        "rateLimitSeconds": 0
+      }
+    },
+    "modeApiConfigs": {
+      "ask": "vamender-local-fast",
+      "architect": "vamender-cloud-plus",
+      "code": "vamender-local-code",
+      "debug": "vamender-local-code",
+      "orchestrator": "vamender-cloud-max",
+      "review": "vamender-cloud-max"
+    }
+  }
+}

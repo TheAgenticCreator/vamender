@@ -199,7 +199,7 @@ mod windows {
             message(
                 "About VaMender",
                 &format!(
-                    "VaMender {}\n\nBackup-first VAR repair and dependency cleanup for Virt-a-Mate 1.22.0.12.\n\nVaMender is provided AS IS. Keep an independent, tested backup; you are responsible for your data, licenses, and every applied operation.",
+                    "VaMender {}\n\nBackup-first VAR repair and dependency cleanup for Virt-a-Mate 1.22.0.13 (tested). VaM 1.22.0.12 is expected to work from the plugin API surface but is untested.\n\nVaMender is provided AS IS. Keep an independent, tested backup; you are responsible for your data, licenses, and every applied operation.",
                     env!("CARGO_PKG_VERSION")
                 ),
                 false,

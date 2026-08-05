@@ -17,7 +17,7 @@ body:
     attributes:
       label: VaMender version
       description: Copy the output of `vamender --version`.
-      placeholder: "vamender 0.1.1"
+      placeholder: "vamender 0.1.0"
     validations:
       required: true
   - type: dropdown

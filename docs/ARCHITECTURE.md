@@ -5,8 +5,9 @@
 ## System context
 
 VaMender is a backup-first Windows tool for reconciling a Virt-a-Mate (VaM)
-AddonPackages library. Its supported runtime is Windows x64 with VaM
-1.22.0.12. The Rust engine owns archive analysis and every filesystem mutation;
+AddonPackages library. Its verified runtime is Windows x64 with VaM 1.22.0.13;
+VaM 1.22.0.12 is expected to work but has not been directly tested. The Rust
+engine owns archive analysis and every filesystem mutation;
 the CLR 2 Session Plugin is a sandboxed UI/client. The current release channel
 is beta, with production-grade safety and release evidence required.
 
@@ -14,7 +15,7 @@ is beta, with production-grade safety and release evidence required.
 
 - Product/project: **VaMender**
 - Rust crate, binary, and CLI: `vamender`
-- Current VaM package revision: `AgenticCreator.VaMender.2`
+- Current VaM package revision: `AgenticCreator.VaMender.1`
 - Publisher/creator: `AgenticCreator`
 - Public maintainer/publisher identity: `TheAgenticCreator <312204356+TheAgenticCreatorDev@users.noreply.github.com>`; GitHub actor `TheAgenticCreatorDev`
 - Source repository: `TheAgenticCreator/vamender`
@@ -112,7 +113,7 @@ creation, and CI artifact upload exclusively on GitHub-hosted Windows runners.
 `.github/workflows/release.yml` validates a versioned tag and repeats every
 release gate on Windows. Linux and macOS runners are intentionally absent
 because VaMender and VaM are Windows-only. The CLR 2 plugin is a hash-locked baseline that
-was built and type-load validated against VaM 1.22.0.12. For release-only text
+was built and type-load validated against VaM 1.22.0.13. For release-only text
 changes, CI verifies both that DLL hash and a normalized source-tree hash before
 applying three equal-length UTF-16 stamps: product version, beta release URL,
 and beta Setup wording. Any other plugin-source or binary change fails closed

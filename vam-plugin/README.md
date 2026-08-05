@@ -6,6 +6,8 @@ VaMender is a scene-independent Session Plugin for Check, Deep Check, Plan,
 Repair, Migrate, Full Optimize, Restore Most Recent, and Restore All. VaM stays
 open during operations and rescans its package registry when work completes.
 
+![VaMender Session Plugin control panel](../docs/images/interface/04-vam-session-plugin-panel.png)
+
 ## Installation
 
 1. Download and run the project-published beta
@@ -13,10 +15,10 @@ open during operations and rescans its package registry when work completes.
    [VaMender releases](https://github.com/TheAgenticCreator/vamender/releases).
 2. Choose the folder containing `VaM.exe` and a durable backup folder outside
    `AddonPackages`. Setup installs the engine and
-   `AgenticCreator.VaMender.2.var`; no PowerShell script or open console is
+   `AgenticCreator.VaMender.1.var`; no PowerShell script or open console is
    required.
 3. In VaM, add
-   `AgenticCreator.VaMender.2:/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll`
+   `AgenticCreator.VaMender.1:/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll`
    as a **Session Plugin**.
 4. For automatic startup, open **Session Plugin Presets**, choose
    **Change User Defaults**, then **Set Current as User Defaults**.
@@ -59,9 +61,11 @@ VaM.
 
 ## Compatibility and license
 
-The plugin targets VaM `1.22.0.12`, the current VaM 1.x version and the build
-against which its package lifecycle and sandbox behavior were verified. Older
-builds are not claimed as compatible.
+The plugin was tested with VaM `1.22.0.13`, the current verified runtime. VaM
+`1.22.0.12` is expected to work because the plugin uses stable CLR 2,
+Session Plugin, secure-file, and Unity UI surfaces, but that version has not
+been directly tested. See [`docs/VAM-COMPATIBILITY.md`](../docs/VAM-COMPATIBILITY.md)
+for the exact impact surface and limits.
 
 The VaM VAR is licensed `CC BY 4.0` and identifies **AgenticCreator** with the
 project repository as its attribution link. The source code is also available
@@ -74,11 +78,11 @@ Contributors can build the DLL with:
 ```
 
 The build targets VaM's CLR 2 profile and rejects a DLL unless runtime type
-loading, `MVRScript` subtype discovery, and VaM 1.22.0.12 sandbox metadata
+loading, `MVRScript` subtype discovery, and VaM 1.22.0.13 sandbox metadata
 validation all pass.
 
 The committed DLL is the hash-locked CLR 2 baseline built and type-load
-validated against VaM 1.22.0.12. For a release containing no native behavior
+validated against VaM 1.22.0.13. For a release containing no native behavior
 change, GitHub Actions verifies the baseline DLL and normalized source-tree
 hashes, then stamps only equal-length version, beta URL, and Setup wording
 strings before repeating sandbox metadata validation and VAR packaging. Any

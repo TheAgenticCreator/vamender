@@ -116,7 +116,7 @@ jobs:
         shell: pwsh
         run: >-
           ./tools/package-vam-plugin.ps1
-          -OutputPath ./target/AgenticCreator.VaMender.2.var
+          -OutputPath ./target/AgenticCreator.VaMender.1.var
 
   windows-release:
     name: Windows packaging smoke test
@@ -153,12 +153,12 @@ jobs:
       - name: Build Hub VAR
         shell: pwsh
         run: |
-          ./tools/package-vam-plugin.ps1 -OutputPath ./target/AgenticCreator.VaMender.2.var
+          ./tools/package-vam-plugin.ps1 -OutputPath ./target/AgenticCreator.VaMender.1.var
           $hash = (Get-FileHash `
-            ./target/AgenticCreator.VaMender.2.var `
+            ./target/AgenticCreator.VaMender.1.var `
             -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$hash  AgenticCreator.VaMender.2.var" |
-            Set-Content ./target/AgenticCreator.VaMender.2.var.sha256
+          "$hash  AgenticCreator.VaMender.1.var" |
+            Set-Content ./target/AgenticCreator.VaMender.1.var.sha256
       - name: Verify executable branding
         shell: pwsh
         run: |
@@ -186,7 +186,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path dist | Out-Null
-          Copy-Item target\AgenticCreator.VaMender.2.var dist\
+          Copy-Item target\AgenticCreator.VaMender.1.var dist\
           iscc.exe .\installer\VaMender.iss
           if ($LASTEXITCODE -ne 0) {
             throw "Inno Setup failed with exit code $LASTEXITCODE"
@@ -204,8 +204,8 @@ jobs:
           name: vamender-windows-x64
           path: |
             target/release/vamender.exe
-            target/AgenticCreator.VaMender.2.var
-            target/AgenticCreator.VaMender.2.var.sha256
+            target/AgenticCreator.VaMender.1.var
+            target/AgenticCreator.VaMender.1.var.sha256
             dist/VaMender-Setup-*.exe
             dist/VaMender-Setup-*.exe.sha256
           if-no-files-found: error

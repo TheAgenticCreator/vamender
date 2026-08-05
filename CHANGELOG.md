@@ -10,6 +10,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-08-02
+
+Initial beta release.
+
 ### Added
 
 - Add genuine, privacy-sanitized installer, tray, and in-VaM screenshots plus
@@ -18,34 +22,6 @@ and this project adheres to
   shortcuts, Start with Windows toggle, version/safety details, and safe Exit.
 - Add a Start-menu shortcut and no-argument installed-executable restart path
   so the engine needs no external script or open console.
-
-### Changed
-
-- Run CI quality gates, CodeQL, release validation, packaging, and artifact
-  production exclusively on GitHub-hosted Windows runners.
-- Keep the constrained engine available across normal VaM launches and make
-  shutdown cooperative so an active backup or repair finishes before exit.
-
-### Fixed
-
-- Stop the running tray engine before Setup replaces its executable, reject an
-  upgrade while work is active or queued, and use cooperative shutdown for
-  current installations with an upgrade-compatible fallback for older builds.
-- Checksum-verify the installed Session Plugin and back up and retire older
-  VaMender plugin revisions instead of leaving duplicate revisions installed.
-- Validate the real pull-request head in the pseudonymous identity gate instead
-  of rejecting GitHub's temporary merge commit.
-
-### Security
-
-- Enforce TheAgenticCreator publisher identity in project-authored commit
-  and release-tag metadata with repository-local configuration, pre-push
-  validation, CI/release gates, and an explicit `TheAgenticCreatorDev`
-  authenticated-actor requirement.
-
-## [0.1.1] - 2026-07-31
-
-### Added
 
 - Add Specsmith governance with explicit VaMender identity, architecture,
   requirement-to-test traceability, beta acceptance gates, and change ledger.
@@ -57,25 +33,6 @@ and this project adheres to
   draft with packaging, licensing, screenshot, and moderator-review checks.
 - Add a hash-locked CLR 2 release-stamping gate that rejects native plugin
   changes beyond the approved equal-length release metadata strings.
-
-### Changed
-
-- Treat current VaMender releases as production-grade beta artifacts and make
-  GitHub Actions the authority for building, packaging, checksumming, and
-  uploading tagged release assets.
-- Require version-matched 0.x tags while the beta channel is active and publish
-  tagged GitHub releases as prereleases without marking them latest.
-- Document that repairs change package hashes, may affect Hub identification,
-  and must never be used to redistribute modified third-party VARs.
-- Release product version `0.1.1` with VaM package revision
-  `AgenticCreator.VaMender.2` so SemVer and VaM's integer package version remain
-  distinct and correct.
-
-## [0.1.0] - 2026-07-30
-
-Initial beta release.
-
-### Added
 
 - Inspect complete Virt-a-Mate `AddonPackages` libraries in parallel, with an
   optional full CRC validation pass.
@@ -114,7 +71,40 @@ Initial beta release.
   source license, safety disclaimers, contribution guidance, security policy,
   issue forms, maintainer ownership, Dependabot, CI, CodeQL, and release builds.
 
+### Changed
+
+- Run CI quality gates, CodeQL, release validation, packaging, and artifact
+  production exclusively on GitHub-hosted Windows runners.
+- Keep the constrained engine available across normal VaM launches and make
+  shutdown cooperative so an active backup or repair finishes before exit.
+
+- Treat current VaMender releases as production-grade beta artifacts and make
+  GitHub Actions the authority for building, packaging, checksumming, and
+  uploading tagged release assets.
+- Require version-matched 0.x tags while the beta channel is active and publish
+  tagged GitHub releases as prereleases without marking them latest.
+- Document that repairs change package hashes, may affect Hub identification,
+  and must never be used to redistribute modified third-party VARs.
+- Set the initial product version to `0.1.0` and the independent VaM package
+  revision to `AgenticCreator.VaMender.1` so both public sequences begin at their
+  first release values.
+
+### Fixed
+
+- Stop the running tray engine before Setup replaces its executable, reject an
+  upgrade while work is active or queued, and use cooperative shutdown for
+  current installations with an upgrade-compatible fallback for older builds.
+- Checksum-verify the installed Session Plugin and back up and retire older
+  VaMender plugin revisions instead of leaving duplicate revisions installed.
+- Validate the real pull-request head in the pseudonymous identity gate instead
+  of rejecting GitHub's temporary merge commit.
+
 ### Security
+
+- Enforce TheAgenticCreator publisher identity in project-authored commit
+  and release-tag metadata with repository-local configuration, pre-push
+  validation, CI/release gates, and an explicit `TheAgenticCreatorDev`
+  authenticated-actor requirement.
 
 - Keep the VaM plugin inside VaM's sandbox and communicate with the installed
   engine through a fixed operation allowlist in permitted plugin-data storage.
@@ -127,6 +117,5 @@ Initial beta release.
 - Validate the plugin against VaM 1.22.0.12 CLR 2 type loading and namespace,
   assembly, member, and unmanaged-module restrictions before packaging.
 
-[Unreleased]: https://github.com/TheAgenticCreator/vamender/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/TheAgenticCreator/vamender/compare/v0.1.0...v0.1.1
+[Unreleased]: https://github.com/TheAgenticCreator/vamender/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/TheAgenticCreator/vamender/releases/tag/v0.1.0

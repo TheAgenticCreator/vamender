@@ -22,7 +22,7 @@ There are no date promises in this roadmap.
 ### 0.2.x — representative beta evidence
 
 - Run TEST-018 through TEST-022 on multiple independently backed-up,
-  representative libraries in Windows x64 and VaM 1.22.0.12.
+  representative libraries in Windows x64 and verified VaM 1.22.0.13.
 - Record successful fresh-rescan planning, applied repair/migration, report
   review, selective/full restore, reinstall, and uninstall evidence.
 - Triage real support bundles and add regression fixtures without accepting or
@@ -49,7 +49,8 @@ All gates require dated evidence linked from a release checklist.
    no unresolved critical or high-impact data-integrity issue remains.
 2. **Supported environment** — clean and upgrade installs, engine startup,
    Session Plugin loading, busy-state behavior, VaM rescan, and uninstall pass
-   on supported Windows x64 and VaM 1.22.0.12.
+   on supported Windows x64 and verified VaM 1.22.0.13. VaM 1.22.0.12 is an
+   expected-but-untested compatibility case, not a completed acceptance claim.
 3. **Compatibility** — representative Unicode, nested-library, compression,
    casing, malformed filename, stale-log, and resource-member cases pass.
 4. **Security and privacy** — CodeQL and plugin sandbox gates pass; bridge

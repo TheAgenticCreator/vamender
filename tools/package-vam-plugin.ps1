@@ -2,7 +2,7 @@
 
 [CmdletBinding()]
 param(
-    [string]$OutputPath = ".\dist\AgenticCreator.VaMender.2.var",
+    [string]$OutputPath = ".\dist\AgenticCreator.VaMender.1.var",
     [string]$PluginAssemblyPath =
         ".\vam-plugin\Custom\Scripts\AgenticCreator\VaMender\VaMender.dll"
 )
@@ -36,8 +36,8 @@ if ($meta.creatorName -ne "AgenticCreator" -or $meta.packageName -ne "VaMender")
 if ($meta.licenseType -ne "CC BY") {
     throw "Plugin metadata must use VaM Hub license type CC BY"
 }
-if ($meta.programVersion -ne "1.22.0.12") {
-    throw "Plugin metadata must target verified VaM version 1.22.0.12"
+if ($meta.programVersion -ne "1.22.0.13") {
+    throw "Plugin metadata must target verified VaM version 1.22.0.13"
 }
 
 $cslistPath = Join-Path $scriptRoot "Scripts\AgenticCreator\VaMender\VaMender.cslist"
@@ -84,7 +84,11 @@ if ($legacyUnsafeSources) {
     )
 }
 
-$resolvedOutput = [IO.Path]::GetFullPath((Join-Path $projectRoot $OutputPath))
+$resolvedOutput = if ([IO.Path]::IsPathRooted($OutputPath)) {
+    [IO.Path]::GetFullPath($OutputPath)
+} else {
+    [IO.Path]::GetFullPath((Join-Path $projectRoot $OutputPath))
+}
 $outputDirectory = Split-Path -Parent $resolvedOutput
 New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
 if (Test-Path -LiteralPath $resolvedOutput) {

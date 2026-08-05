@@ -115,7 +115,7 @@ if ($actualSourceHash -ne $normalizedSourceHash) {
     throw (
         "Plugin source contains changes beyond the approved release stamp. " +
         "Expected normalized SHA-256 $normalizedSourceHash, got " +
-        "$actualSourceHash. Rebuild and validate the DLL against VaM 1.22.0.12."
+        "$actualSourceHash. Rebuild and validate the DLL against VaM 1.22.0.13."
     )
 }
 

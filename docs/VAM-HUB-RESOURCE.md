@@ -83,7 +83,7 @@ This is the project website/source link, not a direct asset URL.
 
 Attach first:
 
-`AgenticCreator.VaMender.2.var`
+`AgenticCreator.VaMender.1.var`
 
 Use the exact VAR produced by the approved GitHub Actions tag build. Do not
 attach a locally rebuilt VAR. Do not attach Setup/ZIP/EXE until moderators
@@ -91,7 +91,7 @@ answer the questions above.
 
 ### Version number
 
-**First governed Hub beta: `0.1.1`**
+**First governed Hub beta: `0.1.0`**
 
 Publish that value only after Cargo, installer, changelog, tag, and CI artifacts
 all use the exact same version. Otherwise enter the exact version printed by
@@ -99,15 +99,15 @@ the GitHub Actions release artifact.
 
 The Hub resource version is the VaMender product SemVer. The attached VAR uses
 VaM's separate monotonically increasing integer revision, so this release is
-product `0.1.1` packaged as `AgenticCreator.VaMender.2.var`.
+product `0.1.0` packaged as `AgenticCreator.VaMender.1.var`.
 
 ### VAR Health Report
 
-Upload the exact CI-built `AgenticCreator.VaMender.2.var`. Expected facts:
+Upload the exact CI-built `AgenticCreator.VaMender.1.var`. Expected facts:
 
-- Package ID: `AgenticCreator.VaMender.2`
+- Package ID: `AgenticCreator.VaMender.1`
 - License: `CC BY`
-- VaM program version: `1.22.0.12`
+- VaM program version: `1.22.0.13`
 - Dependencies: none
 - Contents: `meta.json` and
   `Custom/Scripts/AgenticCreator/VaMender/VaMender.dll`
@@ -125,7 +125,7 @@ real screenshot of the VaMender Session Plugin UI.
 **VaMender — production-grade safety, currently beta**
 
 VaMender is a backup-first repair and dependency-cleanup tool for Virt-a-Mate
-1.22.0.12 on Windows x64. It evaluates the complete installed AddonPackages
+1.22.0.13 on Windows x64. It evaluates the complete installed AddonPackages
 graph together with VaM's package-rescan evidence, then plans or applies only
 changes it can justify.
 
@@ -184,7 +184,9 @@ access, backups, and reviewing every plan.
 
 **Compatibility**
 
-- Virt-a-Mate 1.22.0.12
+- Virt-a-Mate 1.22.0.13 — tested
+- Virt-a-Mate 1.22.0.12 — expected to work from the plugin impact surface,
+  but not directly tested
 - Windows x64
 - Session Plugin; no scene or atom required
 - Current release channel: beta
@@ -206,24 +208,29 @@ Recommended gallery, using real application output and synthetic package data:
 
 Project-ready source images:
 
-- `docs/images/interface/02-vam-control-panel.png`
+- `docs/images/interface/03-vam-session-plugin-hero.png`
+- `docs/images/interface/04-vam-session-plugin-panel.png`
+- `docs/images/interface/05-vam-session-plugin-live-check.png`
 - `docs/images/demo/01-before-plan.png`
 - `docs/images/demo/02-after-cleanup.png`
 - `docs/images/installer/03-vam-folder.png`
 - `docs/images/installer/04-backup-folder.png`
 
-1. A 16:9 hero screenshot showing the VaMender Session Plugin Custom UI in
-   VaM's default or empty scene.
-2. The Check or Plan result with package counts and the read-only/no-changes
+1. `docs/images/interface/03-vam-session-plugin-hero.png`: a 16:9 hero showing
+   the genuine VaMender Session Plugin Custom UI with the engine online.
+2. `docs/images/demo/01-before-plan.png`: the Check or Plan result with package counts and the read-only/no-changes
    state visible.
-3. The backup-first repair confirmation showing a sample backup destination and
-   planned actions.
-4. A completed restore/status view.
-5. The real Windows Setup page for selecting VaM and backup folders, using
+3. `docs/images/demo/02-after-cleanup.png`: completed backup-first cleanup with
+   the final verification and empty missing-dependency report visible.
+4. `docs/images/interface/04-vam-session-plugin-panel.png`: a clean panel crop for
+   the secondary gallery image.
+5. `docs/images/interface/05-vam-session-plugin-live-check.png`: a fresh,
+   path-redacted VaM 1.22.0.13 read-only Check completion capture.
+6. The real Windows Setup page for selecting VaM and backup folders, using
    non-personal sample paths.
-6. The local support bundle and `README_FIRST.txt` review warning, using only
-   synthetic package identifiers.
-7. Optionally, the themed **Open VaMender** default-scene button.
+7. Optionally, a local support bundle and `README_FIRST.txt` review warning,
+   using only synthetic package identifiers.
+8. Optionally, the themed **Open VaMender** default-scene button.
 
 Capture at approximately 1920×1080 and crop for readable UI. Use the existing
 thumbnail only if its provenance is non-AI and the project owns it. Do not show

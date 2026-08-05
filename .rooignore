@@ -1,0 +1,16 @@
+.git/
+target/
+dist/
+tmp/
+reports/
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/*.pfx
+**/*.p12
+**/*.kdbx
+**/*.secret
+**/*credentials*
+**/*secrets*
+

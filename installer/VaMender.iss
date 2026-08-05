@@ -4,7 +4,7 @@
 #define MyAppPublisher "AgenticCreator"
 #define MyAppURL "https://github.com/TheAgenticCreator/vamender"
 #define MyAppExeName "vamender.exe"
-#define MyAppVersion "0.1.1"
+#define MyAppVersion "0.1.0"
 
 [Setup]
 AppId={{79C5997D-6D92-44F3-844F-6B9EA0477145}
@@ -34,13 +34,13 @@ RestartApplications=no
 
 [Files]
 Source: "..\target\release\vamender.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\dist\AgenticCreator.VaMender.2.var"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "..\dist\AgenticCreator.VaMender.1.var"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: "{autoprograms}\VaMender"; Filename: "{app}\vamender.exe"; WorkingDir: "{app}"; IconFilename: "{app}\vamender.exe"; Flags: runminimized
 
 [Run]
-Filename: "{app}\vamender.exe"; Parameters: "install-host ""{code:GetVaMRoot}"" --backup ""{code:GetBackupRoot}"" --plugin-var ""{tmp}\AgenticCreator.VaMender.2.var"""; StatusMsg: "Installing the VaM integration and tray host..."; Flags: runhidden waituntilterminated
+Filename: "{app}\vamender.exe"; Parameters: "install-host ""{code:GetVaMRoot}"" --backup ""{code:GetBackupRoot}"" --plugin-var ""{tmp}\AgenticCreator.VaMender.1.var"""; StatusMsg: "Installing the VaM integration and tray host..."; Flags: runhidden waituntilterminated
 
 [UninstallRun]
 Filename: "{app}\vamender.exe"; Parameters: "uninstall-host --purge"; Flags: runhidden waituntilterminated; RunOnceId: "RemoveVaMenderHost"

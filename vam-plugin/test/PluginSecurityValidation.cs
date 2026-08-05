@@ -142,7 +142,7 @@ internal static class PluginSecurityValidation
                     "(mscorlib 2.0.0.0).");
         }
         Console.WriteLine(
-            "VaM 1.22.0.12 plugin security metadata validation passed.");
+            "VaM 1.22.0.13 plugin security metadata validation passed.");
     }
 
     private static bool IsRestrictedNamespace(string value)

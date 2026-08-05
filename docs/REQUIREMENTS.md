@@ -17,7 +17,9 @@ executable, and CLI command name. The current public release channel is
   release evidence.
 - **Current channel**: beta. Documentation, installers, and release notes must
   not describe the current channel as generally available or fully proven.
-- **Supported runtime**: 64-bit Windows with Virt-a-Mate 1.22.0.12. Rust unit
+- **Verified runtime**: 64-bit Windows with Virt-a-Mate 1.22.0.13. VaM
+  1.22.0.12 is expected to work based on the documented plugin impact surface,
+  but has not been directly tested. Rust unit
   and integration tests may run on Linux, but non-Windows runtime behavior is
   not a supported product promise.
 - **Primary user promise**: prove a safe replacement and preserve the original
@@ -35,7 +37,7 @@ executable, and CLI command name. The current public release channel is
 - **Title**: Supported platform and host compatibility
 - **Component**: distribution
 - **Status**: Accepted
-- **Description**: VaMender must support 64-bit Windows and Virt-a-Mate 1.22.0.12, install per-user without administrator rights, and keep Linux execution limited to development and automated test coverage.
+- **Description**: VaMender must support 64-bit Windows and the verified Virt-a-Mate 1.22.0.13 runtime, install per-user without administrator rights, and keep Linux execution limited to development and automated test coverage. VaM 1.22.0.12 remains an expected-but-untested compatibility case based on the plugin impact surface.
 
 ## Analysis and planning
 

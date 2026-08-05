@@ -18,7 +18,7 @@
     "description": "",
     "requirement_id": "REQ-002",
     "type": "e2e",
-    "verification_method": "Build and run every official automated gate on Windows, verify no workflow uses Linux or macOS runners, install without elevation, and load the CLR 2 plugin in VaM 1.22.0.12 as a standard user.",
+    "verification_method": "Build and run every official automated gate on Windows, verify no workflow uses Linux or macOS runners, install without elevation, and load the CLR 2 plugin in the verified VaM 1.22.0.13 runtime as a standard user. Record VaM 1.22.0.12 as expected but untested based on the documented plugin impact surface.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -186,7 +186,7 @@
     "description": "",
     "requirement_id": "REQ-016",
     "type": "e2e",
-    "verification_method": "Pass C# compile/type-load/security validation, then exercise busy locking, status, successful engine operation, and rescan in VaM 1.22.0.12.",
+    "verification_method": "Pass C# compile/type-load/security validation, then exercise busy locking, status, successful engine operation, and rescan in VaM 1.22.0.13. Record the 1.22.0.12 expectation separately; do not claim it was tested.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -258,7 +258,7 @@
     "description": "",
     "requirement_id": "REQ-022",
     "type": "e2e",
-    "verification_method": "Record supported-environment install, check, deep check, plan, backed-up mutation, VaM rescan, report review, restore, and uninstall evidence on a disposable representative library.",
+    "verification_method": "Run tools/run-release-scenarios.ps1 on Windows and retain its JSON summary, reports, screenshots, backup manifests, mutation, restore, and privacy-safe support-bundle evidence; then record supported-environment install, VaM rescan, report review, and uninstall evidence on a disposable representative library.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
