@@ -227,3 +227,12 @@
 - **Changes**: Built the current release-equivalent Windows engine, `.13` plugin, Hub VAR, and Inno Setup bundle from the worktree; installed the Setup into the supplied VaM 1.22.0.13 installation using its independent backup; ran installer/uninstaller/reinstall regression; generated a real read-only library check and privacy-first support bundle; and ran a disposable VaM-mounted migration through the live Session Plugin.
 - **Evidence**: Current VAR SHA-256 `f4d3707dfa7df6ef7a8eecbe778b8eeeae4a9e24533a906dbefb7b41ef61414b`; Setup SHA-256 `54201419007fea748aaf6facaaab028a27b48976d4df4d357c4fd6018e26790e`. The real library reported 3,926 VARs, 0 invalid archives, 0 missing dependencies, and 0 unresolved package IDs. Setup installed matching plugin bytes, preserved the prior VAR in `install-history`, uninstall removed engine/config while retaining plugin, backup, and reports, and reinstall restored the running host. Live bridge request `639215297283257255` rewrote one disposable scene, archived one older VAR after backup, and VaM logged `Scanned 3 packages`, `Package changes detected`, and `COMPLETE — VaM completed its native AddonPackages rescan`; the original 3,926-VAR library was restored and verified.
 - **Status**: local beta gates passed; exact current tagged GitHub Actions VAR/Setup, final tag validation, actual Hub upload/health report, and moderator policy answers remain release prerequisites
+
+## 2026-08-05 — Final CI, dependency, and pull-request release gates
+
+- **Author**: TheAgenticCreator
+- **Type**: release validation, dependency maintenance, and pull-request cleanup
+- **REQs affected**: REQ-002, REQ-003, REQ-009, REQ-010, REQ-011, REQ-012, REQ-015, REQ-016, REQ-017, REQ-020, REQ-021, REQ-022, REQ-023
+- **Changes**: Corrected CI SPDX and CLR 2 plugin stamping gates, incorporated the reviewed `clap` 4.6.5 and GitHub Actions updates, closed superseded Dependabot PRs #3 and #4, and marked release PR #2 ready for review.
+- **Evidence**: GitHub Actions run `31015317654` passed Windows quality gates and packaging smoke test; CodeQL runs `31015318753` and `31015311423` passed. Local `cargo fmt`, clippy, 20 tests, and Specsmith’s 29 checks also passed at commit `558f195`.
+- **Status**: release branch is ready for the annotated `v0.1.0` beta tag; Hub upload, VAR health report, and moderator policy confirmation remain post-tag publication steps
