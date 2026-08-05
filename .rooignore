@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 .git/
 target/
 dist/
@@ -13,4 +15,3 @@ reports/
 **/*.secret
 **/*credentials*
 **/*secrets*
-

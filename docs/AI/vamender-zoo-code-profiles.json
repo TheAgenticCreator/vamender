@@ -29,7 +29,8 @@
         "todoListEnabled": true,
         "modelTemperature": 0.1,
         "modelMaxTokens": 32768,
-        "enableReasoningEffort": false,
+        "enableReasoningEffort": true,
+        "modelMaxThinkingTokens": 8192,
         "consecutiveMistakeLimit": 3,
         "rateLimitSeconds": 0
       },
@@ -77,6 +78,22 @@
         "modelTemperature": 0.1,
         "modelMaxTokens": 65536,
         "modelMaxThinkingTokens": 16384,
+        "enableReasoningEffort": true,
+        "consecutiveMistakeLimit": 3,
+        "rateLimitSeconds": 0
+      },
+      "Kith - Local": {
+        "id": "kith-local",
+        "apiProvider": "openai",
+        "openAiBaseUrl": "http://127.0.0.1:8001/v1",
+        "openAiApiKey": "replace-with-kith-api-key",
+        "openAiModelId": "kith",
+        "openAiUsePromptCache": false,
+        "includeMaxTokens": true,
+        "todoListEnabled": true,
+        "modelTemperature": 0.1,
+        "modelMaxTokens": 32768,
+        "modelMaxThinkingTokens": 8192,
         "enableReasoningEffort": true,
         "consecutiveMistakeLimit": 3,
         "rateLimitSeconds": 0

@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: MIT -->
+
 # VaMender Workflow
 
 - Start by inspecting `git status`, the relevant requirements, architecture, and current Specsmith state.
@@ -8,4 +10,3 @@
 - Make the smallest root-cause change. Use `apply_patch` for edits and avoid unrelated cleanup.
 - After editing, run the narrowest relevant checks first, then the proportional Rust, plugin, documentation, and Specsmith gates.
 - Report unrun required checks and existing unrelated failures explicitly; never convert an incomplete beta gate into a release claim.
-

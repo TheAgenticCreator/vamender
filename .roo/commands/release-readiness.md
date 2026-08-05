@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: MIT -->
+
 # VaMender Release Readiness
 
 Review release readiness without creating or publishing a release.
@@ -7,4 +9,3 @@ Review release readiness without creating or publishing a release.
 3. Check the Windows quality, packaging, identity, security, documentation, and beta-acceptance evidence.
 4. Separate passed evidence from pending CI or manual VaM acceptance.
 5. Report blockers and exact next actions. Never claim release readiness when a required gate is unrun.
-

@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: MIT -->
+
 # Verify VaMender Change
 
 Verify a focused change without committing it.
@@ -7,4 +9,3 @@ Verify a focused change without committing it.
 3. Run formatting and lint checks proportionally to the change.
 4. Run `specsmith audit` and inspect the final diff and worktree.
 5. Report commands, results, unrelated failures, and any remaining manual evidence.
-

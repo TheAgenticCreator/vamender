@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: MIT -->
+
 # VaMender Governance
 
 - Treat `AGENTS.md` as mandatory project policy. Read it before repository work.
@@ -9,4 +11,3 @@
 - Never run destructive VaMender operations against a user's only AddonPackages copy. Use a disposable library for acceptance work.
 - GitHub Actions is the release authority. Do not assemble or claim release artifacts from the workstation.
 - Do not commit, push, create tags, or create branches unless the user explicitly requests that exact action.
-
