@@ -19,9 +19,12 @@ uninstall workflow in the supported Windows/VaM environment.
 
 GA requires an approved requirement changing REQ-001, every gate in
 `docs/ROADMAP.md`, successful repeated beta acceptance on representative
-libraries, no unresolved data-loss/security blocker, moderator-confirmed VaM
-Hub distribution posture, a documented support/rollback/signing decision, and
-GitHub Actions release evidence from the promoted tag.
+libraries, no unresolved data-loss/security blocker, a GitHub Actions release
+as the sole binary distribution source, a current-rule-reviewed F95Zone
+announcement that accurately discloses the product, a documented
+support/rollback/signing decision, and GitHub Actions release evidence from the
+promoted tag. VaMender is not distributed through VaM Hub because its core
+workflow modifies VARs in `AddonPackages`.
 
 Run `specsmith checkpoint` for phase readiness and `specsmith audit` for the
 governance health gate.

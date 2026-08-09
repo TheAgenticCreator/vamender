@@ -16,8 +16,10 @@ There are no date promises in this roadmap.
   and plugin sandbox validation remain non-negotiable.
 - Support reports are generated locally, privacy-reviewed, and never uploaded
   automatically.
-- The VaM Hub resource remains a draft until its Health Report is clean and a
-  moderator confirms the external companion engine/installer presentation.
+- GitHub Releases is the sole binary distribution source. An F95Zone post may
+  announce the matching GitHub release only after a manual current-rules review.
+  VaMender is not distributed through VaM Hub because its moderation policy
+  prohibits third-party apps or scripts that modify VARs in `AddonPackages`.
 
 ### 0.2.x — representative beta evidence
 
@@ -56,9 +58,12 @@ All gates require dated evidence linked from a release checklist.
 4. **Security and privacy** — CodeQL and plugin sandbox gates pass; bridge
    threat model is reviewed; support bundles contain no forbidden data; the
    signing and vulnerability-response posture is documented.
-5. **VaM Hub compliance** — the exact release VAR passes the Hub Health Report;
-   licensing/credits are accurate; moderator guidance for the companion engine
-   and installer is recorded; screenshots and description follow current rules.
+5. **Public-release integrity** — GitHub Actions alone publishes the exact
+   tagged executable, Session Plugin VAR, Setup, portable ZIP, and checksums;
+   the F95Zone announcement follows then-current rules, links only to that
+   GitHub release, and accurately discloses the executable, beta, safety,
+   compatibility, and independence boundaries. No VaM Hub publication is
+   claimed or attempted.
 6. **Support readiness** — issue forms, support-report workflow, privacy
    guidance, triage expectations, and rollback instructions have been tested by
    beta users.
@@ -66,7 +71,7 @@ All gates require dated evidence linked from a release checklist.
    plugin, installer, and changelog versions; the current integer VAR revision
    is documented; GitHub Actions alone builds, packages, checksums, retains,
    and publishes every release artifact.
-8. **Documentation** — README, Hub resource, support, security, disclaimer,
+8. **Documentation** — README, GitHub/F95Zone release guide, support, security, disclaimer,
    architecture, requirements, and changelog describe actual behavior and do
    not carry stale beta-only limitations.
 9. **Approval** — Specsmith is healthy, all v1.0 requirements have evidence,

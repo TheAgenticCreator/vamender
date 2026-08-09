@@ -91,7 +91,7 @@ The hidden host commands checksum-verify the plugin VAR, back up and retire old
 VaMender plugin revisions, configure/start the tray-hosted local engine, create
 a Start-menu restart shortcut, and remove application components safely.
 `tools/package-vam-plugin.ps1` constructs the
-Hub VAR; the plugin validation project checks CLR 2 loadability and sandbox
+Session Plugin VAR; the plugin validation project checks CLR 2 loadability and sandbox
 metadata. See REQ-002, REQ-017, and REQ-020.
 
 ### Support reporting
@@ -107,7 +107,7 @@ REQ-024.
 ### CI and release automation
 
 `.github/workflows/ci.yml` runs format, SPDX, lint, Rust tests, plugin build and
-security validation, Hub VAR packaging, release build, branding, Setup
+security validation, Session Plugin VAR packaging, release build, branding, Setup
 creation, and CI artifact upload exclusively on GitHub-hosted Windows runners.
 `.github/workflows/codeql.yml` performs Rust security analysis on Windows.
 `.github/workflows/release.yml` validates a versioned tag and repeats every

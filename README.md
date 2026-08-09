@@ -64,6 +64,23 @@ Plugin, secure-file, and Unity UI surfaces, but that version has not been
 directly tested. See [`docs/VAM-COMPATIBILITY.md`](docs/VAM-COMPATIBILITY.md)
 for the exact compatibility basis and limits.
 
+## Distribution
+
+GitHub Releases is VaMender's only binary distribution channel. Download the
+CI-built Setup executable, portable ZIP, VAR, and SHA-256 sidecars only from
+[VaMender releases](https://github.com/TheAgenticCreator/vamender/releases).
+Setup is the normal-user install path: it installs both the engine and the
+bundled Session Plugin VAR. The standalone VAR is a CI-packaged/manual artifact,
+not a replacement for Setup.
+An F95Zone thread is an announcement and discussion page that links back to the
+matching GitHub release; it must not host a separate binary or present a
+download as a support link.
+
+VaMender is not distributed through VaM Hub. Its moderators do not permit
+third-party apps or scripts that modify VARs in `AddonPackages`, which is core
+to VaMender's backup-first repair workflow. Do not upload or resubmit the VAR
+to VaM Hub.
+
 ## Safety model
 
 - VaMender can operate while VaM is open. The in-VaM control panel submits
@@ -352,7 +369,8 @@ cargo build --release --locked
 ```
 
 The compiled executable is written to `target\release\vamender.exe`. Build the
-native plugin against an installed VaM copy, then build the Hub-ready VAR:
+native plugin against an installed VaM copy, then build the plugin VAR used by
+Setup:
 
 ```powershell
 .\tools\build-vam-plugin.ps1 -VaMPath "D:\VaM"
@@ -449,14 +467,14 @@ checks must pass before a change can be merged.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [MAINTAINERS.md](MAINTAINERS.md),
 [SECURITY.md](SECURITY.md), [the beta-to-v1.0.0 roadmap](docs/ROADMAP.md),
-[the VaM Hub resource draft](docs/VAM-HUB-RESOURCE.md), and
+[the GitHub and F95Zone release guide](docs/F95ZONE-RELEASE.md), and
 [CHANGELOG.md](CHANGELOG.md) for project ownership, policies, release planning,
 and history.
 
 ## License and disclaimer
 
 VaMender's repository source code is available under the
-[MIT License](LICENSE). The VaMender Hub VAR is additionally distributed under
+[MIT License](LICENSE). The VaMender Session Plugin VAR is additionally distributed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and declares the
 VaM-supported `CC BY` value in `meta.json`. Attribution should name
 **AgenticCreator** and link to

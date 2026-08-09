@@ -27,6 +27,11 @@ Uninstall from Windows **Installed apps > VaMender**. Uninstalling removes the
 per-user engine and its startup registration, but deliberately retains backups,
 reports, and the installed VAR so user data is never silently deleted.
 
+GitHub Releases is the sole binary source for VaMender. An F95Zone discussion
+post may point to the matching GitHub release, but it is not an alternate
+download host. VaMender is not distributed through VaM Hub because its engine
+modifies VARs in `AddonPackages`.
+
 VaMender does not require a scene or atom. Open its panel from Session Plugin
 Custom UI. On VaM's default scene it also places a themed **Open VaMender**
 button beside **Open Default Scene**. VaMender does not modify the Add-On

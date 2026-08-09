@@ -192,7 +192,7 @@
     Merge candidates pass pinned Specsmith synchronization/coverage/audit, Rust
     formatting, SPDX validation, denied-warning and cognitive-complexity
     Clippy, all locked Rust tests, C# compile/type-load and sandbox validation,
-    Hub VAR packaging, release build/branding/Setup validation, and CodeQL on
+    Session Plugin VAR packaging, release build/branding/Setup validation, and CodeQL on
     GitHub-hosted Windows runners only. No Linux or macOS job is authoritative.
 
 - id: REQ-021
@@ -202,9 +202,9 @@
   description: >-
     While the channel is beta, a tag uses v0.MINOR.PATCH and matches Cargo,
     plugin, and installer versions with a dated changelog entry. Windows-only
-    GitHub Actions builds, packages, checksums, retains as workflow artifacts,
-    and uploads the
-    executable, Hub VAR, Setup, and portable ZIP to a GitHub prerelease from the
+    GitHub Actions builds the executable, packages and checksums it into the
+    portable ZIP, retains workflow artifacts, and uploads the Session Plugin
+    VAR, Setup, and portable ZIP to a GitHub prerelease from the
     tagged commit. For release-only text changes, Actions verifies the approved
     CLR 2 DLL baseline hash and a normalized plugin-source hash before applying
     only equal-length version, beta URL, and Setup wording stamps. Any other
@@ -243,16 +243,20 @@
     data automatically, and opens GitHub only after explicit review consent.
 
 - id: REQ-025
-  title: VaM Hub resource compliance
+  title: GitHub release and F95Zone announcement
   status: partial
-  source: docs/VAM-HUB-RESOURCE.md; tools/package-vam-plugin.ps1; vam-plugin/meta.json
+  source: docs/F95ZONE-RELEASE.md; README.md; installer/VaMender.iss; tools/package-vam-plugin.ps1; vam-plugin/meta.json
   description: >-
-    The Hub resource uses Plugins + Scripts, hosts the primary VAR on the Hub,
-    packages only original VaMender content with no embedded executable or
-    dependencies, declares CC BY with linked creator credit, accurately
-    discloses the sandboxed plugin and external companion engine, avoids direct
-    external file links in the description, and remains a draft until the VAR
-    Health Report is clean and moderators confirm the installer/engine model.
+    VaMender is not submitted to VaM Hub because its moderators rejected
+    third-party apps or scripts that modify VARs in AddonPackages. GitHub
+    Releases is the only binary distribution channel and must contain the exact
+    tagged Setup, Session Plugin VAR, portable ZIP, and SHA-256 sidecars. An F95Zone page may
+    announce and discuss the release, but must link to the matching GitHub
+    release, accurately disclose beta status, the external Windows executable,
+    explicit mutation, verified backup, tested VaM 1.22.0.13 / expected but
+    untested 1.22.0.12 compatibility, and project independence, and must never
+    disguise a download as a support link. The current F95Zone rules require
+    manual review immediately before each post.
 
 - id: REQ-026
   title: Defined path to v1.0.0
@@ -262,7 +266,7 @@
     VaMender remains beta until the documented v1.0.0 gates are met for
     repeated supported-environment safety evidence, restore and rollback,
     installer/plugin compatibility, security and signing posture, privacy-safe
-    support, Hub compliance, documentation, and reproducible GitHub Actions
+    support, GitHub/F95Zone release disclosure, documentation, and reproducible GitHub Actions
     release artifacts.
 
 - id: REQ-027

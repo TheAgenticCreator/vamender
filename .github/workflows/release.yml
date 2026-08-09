@@ -121,7 +121,7 @@ jobs:
           --no-build
           --
           vam-plugin/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll
-      - name: Build and validate Hub VAR
+      - name: Build and validate Session Plugin VAR
         shell: pwsh
         run: >-
           ./tools/package-vam-plugin.ps1
@@ -163,7 +163,7 @@ jobs:
         run: cargo test --all-targets --all-features --locked
       - name: Build
         run: cargo build --release --locked
-      - name: Build Hub VAR
+      - name: Build Session Plugin VAR
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path dist | Out-Null
@@ -213,7 +213,7 @@ jobs:
           Copy-Item target\release\vamender.exe $portable
           Copy-Item cleanup.ps1, comprehensive-cleanup.ps1 $portable
           Copy-Item README.md, CHANGELOG.md, LICENSE, DISCLAIMER.md $portable
-          Copy-Item assets\vamender-icon.png, assets\vamender-hub-icon-100.png $portable
+          Copy-Item assets\vamender-icon.png, assets\vamender-icon-100.png $portable
           Compress-Archive -Path portable\* -DestinationPath vamender-windows-x64.zip
           $hash = (Get-FileHash vamender-windows-x64.zip -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  vamender-windows-x64.zip" | Set-Content vamender-windows-x64.zip.sha256

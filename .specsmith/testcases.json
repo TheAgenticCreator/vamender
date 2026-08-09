@@ -290,11 +290,11 @@
   {
     "id": "TEST-025",
     "version": 1,
-    "title": "VaM Hub draft and package compliance review",
+    "title": "GitHub release and F95Zone announcement review",
     "description": "",
     "requirement_id": "REQ-025",
     "type": "manual",
-    "verification_method": "Upload the exact CI VAR to the Hub Health Report, verify only meta.json and the original VaMender DLL are present with CC BY and no dependencies, obtain moderator confirmation for the companion installer/engine model, and review the draft against current official policies before posting.",
+    "verification_method": "Verify GitHub Actions built the tagged executable and published the exact tagged Setup, Session Plugin VAR, portable ZIP, and SHA-256 sidecars. Immediately before publishing, manually review current F95Zone rules and then verify the announcement links to the matching GitHub release without hosting a separate binary or disguising a download as support. Confirm it states beta status, Windows/external-engine requirement, explicit mutation and verified backup, tested VaM 1.22.0.13 / expected-but-untested 1.22.0.12 compatibility, project independence, and a genuine path-redacted UI capture. Confirm no VaM Hub submission or re-submission is requested because the project modifies VARs in AddonPackages.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -331,6 +331,18 @@
     "requirement_id": "REQ-028",
     "type": "integration",
     "verification_method": "Build and install on Windows x64, verify the notification-area icon and menu actions, confirm Start with Windows registration uses the hidden host command, confirm the bridge stays available while VaM opens and closes, reject external shutdown while work is active or queued, then request tray and external shutdown while idle and verify cooperative exit, lock cleanup, unchanged startup registration, and one healthy no-argument restart.",
+    "input": {},
+    "expected_behavior": {},
+    "confidence": 1.0
+  },
+  {
+    "id": "TEST-029",
+    "version": 1,
+    "title": "Windows repository hygiene policy",
+    "description": "",
+    "requirement_id": "REQ-020",
+    "type": "build",
+    "verification_method": "On Windows, verify tracked files exclude local VaM runtime state, credentials, assistant memory, and build products; verify .gitignore excludes representative local paths; and verify .gitattributes checks out project text as CRLF while preserving Git hooks as LF and release payloads as binary.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0

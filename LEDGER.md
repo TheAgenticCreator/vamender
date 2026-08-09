@@ -236,3 +236,66 @@
 - **Changes**: Corrected CI SPDX and CLR 2 plugin stamping gates, incorporated the reviewed `clap` 4.6.5 and GitHub Actions updates, closed superseded Dependabot PRs #3 and #4, and marked release PR #2 ready for review.
 - **Evidence**: GitHub Actions run `31015317654` passed Windows quality gates and packaging smoke test; CodeQL runs `31015318753` and `31015311423` passed. Local `cargo fmt`, clippy, 20 tests, and Specsmith’s 29 checks also passed at commit `558f195`.
 - **Status**: release branch is ready for the annotated `v0.1.0` beta tag; Hub upload, VAR health report, and moderator policy confirmation remain post-tag publication steps
+
+## 2026-08-05 — Windows repository hygiene policy
+
+- **Author**: TheAgenticCreator
+- **Type**: source-control hygiene and Windows build policy
+- **REQs affected**: REQ-020, REQ-023
+- **Changes**: Removed project tracking of local ChronoMemory assistant state, ignored local VaM runtime folders, credentials, logs, editor state, and Windows build outputs, defined Windows CRLF text checkout with LF Git hooks and explicit binary release payload classifications, and aligned the legacy requirements summary with the canonical Windows-only development and validation policy.
+- **Evidence**: Windows Git ignore and attribute checks are recorded by TEST-029; Specsmith synchronization and audit are required after the test-spec update.
+- **Status**: pending local validation and maintainer commit
+
+## 2026-08-05 — Windows repository hygiene verification
+
+- **Author**: TheAgenticCreator
+- **Type**: source-control hygiene validation
+- **REQs affected**: REQ-020, REQ-023
+- **Changes**: Synchronized the canonical Specsmith test state after adding TEST-029 and verified the narrowed repository hygiene policy without altering local VaM data or credentials.
+- **Evidence**: `specsmith sync` completed with 29 test cases and `specsmith audit` passed 29 checks. `git check-ignore` matched representative local runtime, credential, assistant-memory, and build paths; `git ls-files -ci --exclude-standard` returned no ignored tracked files; and `git check-attr` confirmed CRLF Windows text, LF hooks, and binary payload handling. `cargo fmt`, clippy, and all 20 Rust tests passed.
+- **Status**: staged cleanup is ready for maintainer review and commit
+
+## 2026-08-05 — Hub screenshot refresh and install-prerequisite clarification
+
+- **Author**: TheAgenticCreator
+- **Type**: release media and publication-documentation correction
+- **REQs affected**: REQ-002, REQ-016, REQ-018, REQ-022, REQ-023, REQ-025
+- **Changes**: Replaced the wide, low-detail hero and stale live-check media with unscaled, tight VaM 1.22.0.13 Session Plugin captures. Redacted local filesystem paths, excluded unrelated scene content, made the actual Session Plugin UI crop the Hub thumbnail, and supplied exact copy for the required Windows companion Setup prerequisite.
+- **Evidence**: The installed Session Plugin reported the engine online; a new read-only `Check Library` request completed successfully through bridge request `639215460557002717`. No package mutation was requested. The replacement PNGs contain only the native panel and opaque path redaction; no generated or upscaled content was used.
+- **Status**: media and Hub description are ready for the current draft; live Hub policy review, Health Report, and moderator confirmation remain publication gates
+
+## 2026-08-05 — Installer media framing and branded Hub thumbnail
+
+- **Author**: TheAgenticCreator
+- **Type**: release media refinement and publication-documentation correction
+- **REQs affected**: REQ-018, REQ-023, REQ-025
+- **Changes**: Cropped the VaM-folder and backup-folder Setup captures to the native installer window, removing surrounding desktop pixels without resizing or changing UI content. Restored the project-owned VaMender shield as the Hub resource thumbnail while retaining the real Session Plugin UI as the first description image.
+- **Evidence**: Both installer PNGs were visually reviewed after unscaled crop and contain only the sanitized Setup window. Hub media instructions now distinguish the shield's branding role from the genuine UI screenshots' product-demonstration role.
+- **Status**: refined media is ready for draft upload; current Hub policy review, Health Report, and moderator confirmation remain publication gates
+
+## 2026-08-09 — GitHub-only distribution and F95Zone announcement policy
+
+- **Author**: TheAgenticCreator
+- **Type**: release-governance, installer-documentation, and publication-policy correction
+- **REQs affected**: REQ-017, REQ-020, REQ-021, REQ-023, REQ-025, REQ-026
+- **Changes**: Replaced the VaM Hub resource draft with the GitHub/F95Zone release guide, made GitHub Releases the sole binary source, and made the F95Zone role an announcement/discussion page that links to the exact tagged GitHub release. Documented Setup as the normal-user installation route for both the external engine and bundled Session Plugin VAR; renamed the generic project shield asset; and removed Hub-specific workflow, package, issue-template, and media guidance.
+- **Evidence**: The moderator rejection received on 2026-08-09 states that third-party apps or scripts modifying VARs in `AddonPackages` are not permitted and that downloads cannot be placed in a support-link field. The installer packages the plugin VAR and invokes the checksum-verified host install path, so a standalone VAR cannot replace Setup for normal users. TEST-025 now requires a current F95Zone-rules review and exact tagged GitHub release verification before each announcement.
+- **Status**: corrected `v0.1.0` reissue pending Specsmith synchronization, local validation, and GitHub Actions release evidence; prior GitHub release/tag will be withdrawn before replacement publication
+
+## 2026-08-09 — CLR 2 release-stamp baseline correction
+
+- **Author**: TheAgenticCreator
+- **Type**: release-gate correction
+- **REQs affected**: REQ-002, REQ-016, REQ-020, REQ-021
+- **Changes**: Corrected `tools/stamp-vam-plugin-release.ps1`'s normalized source SHA-256 from the stale `0.1.1` source value to the actual committed `0.1.0` source value. No CLR 2 source or DLL behavior changed.
+- **Evidence**: The committed DLL SHA-256 remains `edf77bb3df1d70a577df9fb087b78fe7d5e946816ead666d1a469f53a7fb1f28`, contains the `0.1.0` release string, and passed the CLR 2 type-load, sandbox metadata, momentary-action, and operation-lock validation. The corrected normalized source SHA-256 is `01d6e76b6757899235e91e2e0c509a650dc08b3f2e38fc4dd8db03ea89362d51`.
+- **Status**: release stamp gate corrected; full local rerun pending
+
+## 2026-08-09 — Release-stamp PowerShell runtime correction
+
+- **Author**: TheAgenticCreator
+- **Type**: release-gate investigation and correction
+- **REQs affected**: REQ-020, REQ-021
+- **Changes**: Reverted the attempted normalized-source hash change after reproducing that Windows PowerShell 5.1 and GitHub Actions PowerShell 7 compute different values for the same source normalization path. Retained the original PowerShell 7 / GitHub Actions baseline hash, which is the authoritative release environment.
+- **Evidence**: The PR head `6b9234dd8f1b13ecda9d40789b4f5625e5ceb08a` contains `0.1.0` source. Local PowerShell 7 and the failed CI job both computed `ba487c8b6519a0a37493259797d7020fbe27770418f3816e79e7049095bbb31b`; only local Windows PowerShell 5.1 computed `01d6e76b6757899235e91e2e0c509a650dc08b3f2e38fc4dd8db03ea89362d51`. The committed DLL hash remains unchanged and validated.
+- **Status**: use PowerShell 7 for this release-stamp gate; rerun CI required

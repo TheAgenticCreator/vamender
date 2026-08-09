@@ -10,7 +10,7 @@ and this project adheres to
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-08-02
+## [0.1.0] - 2026-08-09
 
 Initial beta release.
 
@@ -73,6 +73,18 @@ Initial beta release.
 
 ### Changed
 
+- Make GitHub Releases the sole binary distribution channel for VaMender beta
+  assets. The normal-user Setup download installs both the engine and bundled
+  Session Plugin VAR.
+- Replace the obsolete VaM Hub publication plan with a copy-ready F95Zone
+  announcement guide. The F95Zone post links to the matching GitHub release,
+  carries the required beta and safety disclosures, and never hosts a separate
+  binary or disguises a download as support.
+- Rename the project-owned 100-pixel shield asset so it can be used as generic
+  release-thread branding rather than a Hub-specific resource thumbnail.
+- Remove stale Hub-oriented workflow labels, packaging wording, documentation
+  issue categories, and installer/plugin instructions after Hub moderators
+  rejected third-party apps or scripts that modify `AddonPackages` VARs.
 - Run CI quality gates, CodeQL, release validation, packaging, and artifact
   production exclusively on GitHub-hosted Windows runners.
 - Keep the constrained engine available across normal VaM launches and make

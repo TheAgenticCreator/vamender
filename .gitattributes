@@ -1,9 +1,53 @@
 # SPDX-License-Identifier: MIT
-* text=auto
 
-*.rs text eol=lf
-*.toml text eol=lf
-*.md text eol=lf
-*.yml text eol=lf
-*.yaml text eol=lf
+# VaMender is built and released on Windows only. Keep repository text
+# normalized by Git while checking it out with Windows-native line endings.
+* text=auto eol=crlf
+
+# Git executes hooks through its POSIX-compatible shell on Windows.
+/.githooks/* text eol=lf
+*.sh text eol=lf
+
+# Windows project and tooling files are explicit for readability.
 *.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.iss text eol=crlf
+*.rs text eol=crlf
+*.toml text eol=crlf
+*.md text eol=crlf
+*.yml text eol=crlf
+*.yaml text eol=crlf
+*.json text eol=crlf
+*.cs text eol=crlf
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.props text eol=crlf
+*.targets text eol=crlf
+*.xml text eol=crlf
+
+# Release payloads, VaM binaries, and artwork must never be text-normalized.
+*.dll binary !eol
+*.exe binary !eol
+*.pdb binary !eol
+*.lib binary !eol
+*.exp binary !eol
+*.ilk binary !eol
+*.var binary !eol
+*.zip binary !eol
+*.7z binary !eol
+*.msi binary !eol
+*.cab binary !eol
+*.ico binary !eol
+*.png binary !eol
+*.jpg binary !eol
+*.jpeg binary !eol
+*.gif binary !eol
+*.webp binary !eol
+*.bmp binary !eol
+*.tga binary !eol
+*.pdf binary !eol
+*.ttf binary !eol
+*.otf binary !eol
+*.woff binary !eol
+*.woff2 binary !eol

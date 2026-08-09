@@ -112,7 +112,7 @@ jobs:
           --no-build
           --
           vam-plugin/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll
-      - name: Build and validate Hub VAR
+      - name: Build and validate Session Plugin VAR
         shell: pwsh
         run: >-
           ./tools/package-vam-plugin.ps1
@@ -150,7 +150,7 @@ jobs:
           toolchain: 1.88.0
       - name: Build
         run: cargo build --release --locked
-      - name: Build Hub VAR
+      - name: Build Session Plugin VAR
         shell: pwsh
         run: |
           ./tools/package-vam-plugin.ps1 -OutputPath ./target/AgenticCreator.VaMender.1.var

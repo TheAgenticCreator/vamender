@@ -6,7 +6,7 @@
   "scriptReferenceVersionOption": "Exact",
   "description": "Full in-VaM control panel for VaMender Check, Plan, Repair, Migrate, Full Optimize, and Restore through its automatically installed backup-first engine. Adds a direct launcher to VaM's themed default-scene controls, then asks VaM to rescan after completion.",
   "credits": "VaMender by AgenticCreator — https://github.com/TheAgenticCreator/vamender. VaM package license: CC BY 4.0; source code is also available under MIT.",
-  "instructions": "Beta software: keep an independent full backup. Run VaMender Setup from the project release page once; it installs the engine and this VAR without PowerShell. Add VaMender.dll under Session Plugins. No scene or atom is required. Open VaMender from the themed button beside Open Default Scene or Session Plugin Custom UI. VaM stays open and is rescanned after engine completion. To load the panel at startup, use Session Plugin Presets > Change User Defaults > Set Current as User Defaults.",
+  "instructions": "Beta software: keep an independent full backup. Download VaMender Setup from the canonical GitHub Release once; it installs the engine and this bundled VAR without PowerShell. The standalone VAR is not the normal installation route. Add VaMender.dll under Session Plugins. No scene or atom is required. Open VaMender from the themed button beside Open Default Scene or Session Plugin Custom UI. VaM stays open and is rescanned after engine completion. To load the panel at startup, use Session Plugin Presets > Change User Defaults > Set Current as User Defaults.",
   "promotionalLink": "https://github.com/TheAgenticCreator/vamender",
   "programVersion": "1.22.0.13",
   "contentList": [

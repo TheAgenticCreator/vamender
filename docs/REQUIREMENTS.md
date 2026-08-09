@@ -19,9 +19,9 @@ executable, and CLI command name. The current public release channel is
   not describe the current channel as generally available or fully proven.
 - **Verified runtime**: 64-bit Windows with Virt-a-Mate 1.22.0.13. VaM
   1.22.0.12 is expected to work based on the documented plugin impact surface,
-  but has not been directly tested. Rust unit
-  and integration tests may run on Linux, but non-Windows runtime behavior is
-  not a supported product promise.
+  but has not been directly tested. Development, unit and integration testing,
+  CI, packaging, and release verification are Windows-only; Linux and macOS
+  are neither supported product nor validation platforms.
 - **Primary user promise**: prove a safe replacement and preserve the original
   before changing a live VAR.
 
@@ -37,7 +37,7 @@ executable, and CLI command name. The current public release channel is
 - **Title**: Supported platform and host compatibility
 - **Component**: distribution
 - **Status**: Accepted
-- **Description**: VaMender must support 64-bit Windows and the verified Virt-a-Mate 1.22.0.13 runtime, install per-user without administrator rights, and keep Linux execution limited to development and automated test coverage. VaM 1.22.0.12 remains an expected-but-untested compatibility case based on the plugin impact surface.
+- **Description**: VaMender must support 64-bit Windows and the verified Virt-a-Mate 1.22.0.13 runtime, install per-user without administrator rights, and keep development, testing, CI, packaging, and release validation on Windows. Linux and macOS are neither supported product nor validation platforms. VaM 1.22.0.12 remains an expected-but-untested compatibility case based on the plugin impact surface.
 
 ## Analysis and planning
 
@@ -157,13 +157,13 @@ executable, and CLI command name. The current public release channel is
 - **Title**: Required quality and security gates
 - **Component**: quality
 - **Status**: Accepted
-- **Description**: Every merge candidate must pass Rust formatting, SPDX validation, Clippy with warnings and cognitive-complexity findings denied, all locked Rust tests, C# plugin compile/type-load/security validation, Hub VAR packaging validation, Windows release build validation, and CodeQL according to repository CI.
+- **Description**: Every merge candidate must pass Rust formatting, SPDX validation, Clippy with warnings and cognitive-complexity findings denied, all locked Rust tests, C# plugin compile/type-load/security validation, Session Plugin VAR packaging validation, Windows release build validation, and CodeQL according to repository CI.
 
 ## REQ-021
 - **Title**: Reproducible beta release artifacts
 - **Component**: release
 - **Status**: Accepted
-- **Description**: A beta release tag must use Semantic Versioning, match Cargo and installer versions, have a dated changelog entry, build the Windows executable, Hub VAR, Setup executable, and portable ZIP from the tagged commit, and publish SHA-256 sidecars for downloadable artifacts.
+- **Description**: A beta release tag must use Semantic Versioning, match Cargo and installer versions, have a dated changelog entry, build the Windows executable, Session Plugin VAR, Setup executable, and portable ZIP from the tagged commit, and publish SHA-256 sidecars for downloadable artifacts.
 
 ## REQ-022
 - **Title**: Beta acceptance evidence

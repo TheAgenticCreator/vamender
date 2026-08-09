@@ -102,7 +102,7 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 - **Status**: Automated
 
 ## TEST-012
-- **Title**: Hub VAR packaging validation
+- **Title**: Session Plugin VAR packaging validation
 - **Type**: build
 - **Description**: Package `AgenticCreator.VaMender.1.var` and validate required metadata and payload layout.
 - **Verification**: `tools/package-vam-plugin.ps1` exits 0.
@@ -186,7 +186,15 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 ## TEST-022
 - **Title**: Documentation and beta-language review
 - **Type**: manual
-- **Description**: Review user and maintainer documents plus installer/release text for canonical VaMender naming, beta posture, supported platform, backup warnings, limitations, and independent-project disclosure. Confirm the README provides distinct, implementation-accurate Session Plugin and standalone CLI procedures, including read-only planning, mutation gates, backup/report locations, rescans, and restore.
-- **Verification**: No conflicting production/GA claim or omitted safety warning remains, and both documented usage routes can be followed without relying on unstated mutation or restore behavior.
+- **Description**: Review user and maintainer documents plus installer/release text for canonical VaMender naming, beta posture, supported platform, backup warnings, limitations, and independent-project disclosure. Confirm the README provides distinct, implementation-accurate Session Plugin and standalone CLI procedures, including the required Windows companion Setup, read-only planning, mutation gates, backup/report locations, rescans, and restore. Confirm GitHub Releases is the sole binary source, the F95Zone announcement links to the matching release after a current-rules review, and media is genuine and path-redacted with a Session Plugin UI capture prominent in the post.
+- **Verification**: No conflicting production/GA claim, omitted safety warning, ambiguous Setup prerequisite, VaM Hub publication instruction, separate F95Zone binary, or disguised download/support link remains; both documented usage routes can be followed without relying on unstated mutation or restore behavior; and release media contains no generated, upscaled, private-path, unrelated-scene, or desktop-background content.
 - **Covers**: REQ-001, REQ-002, REQ-014, REQ-015, REQ-016, REQ-017, REQ-018, REQ-021, REQ-022, REQ-023
 - **Status**: Manual required for beta release
+
+## TEST-029
+- **Title**: Windows repository hygiene policy
+- **Type**: build
+- **Description**: On Windows, verify tracked files exclude local VaM runtime state, credentials, assistant memory, and build products; verify `.gitignore` excludes representative local paths; and verify `.gitattributes` checks out project text as CRLF while preserving Git hooks as LF and release payloads as binary.
+- **Verification**: `git ls-files -ci --exclude-standard` reports no ignored tracked files; `git check-ignore` matches representative local state; and `git check-attr` reports the required Windows text, hook, and binary classifications.
+- **Covers**: REQ-020, REQ-023
+- **Status**: Local automated

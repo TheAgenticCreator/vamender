@@ -34,7 +34,7 @@ if ($meta.creatorName -ne "AgenticCreator" -or $meta.packageName -ne "VaMender")
     throw "Plugin metadata must identify AgenticCreator.VaMender"
 }
 if ($meta.licenseType -ne "CC BY") {
-    throw "Plugin metadata must use VaM Hub license type CC BY"
+    throw "Plugin metadata must use VaM license type CC BY"
 }
 if ($meta.programVersion -ne "1.22.0.13") {
     throw "Plugin metadata must target verified VaM version 1.22.0.13"
