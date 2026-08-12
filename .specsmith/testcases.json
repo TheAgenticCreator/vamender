@@ -234,7 +234,7 @@
     "description": "",
     "requirement_id": "REQ-020",
     "type": "build",
-    "verification_method": "Require green pinned Specsmith audit, format, SPDX, Clippy, Rust tests, C# validation, VAR package, build/branding/Setup, artifact upload, and CodeQL jobs, all on GitHub-hosted Windows runners; reject any Linux or macOS runner declaration.",
+    "verification_method": "Require green pinned Specsmith audit, format, SPDX, Clippy, Rust tests, C# validation, VAR package, build/branding/Setup, artifact upload, and CodeQL jobs, all on GitHub-hosted Windows runners; require the reviewed github/codeql-action v4.37.6 init/analyze pins and reject any Linux or macOS runner declaration.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0

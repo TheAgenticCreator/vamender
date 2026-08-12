@@ -137,7 +137,9 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 - **Title**: CodeQL analysis
 - **Type**: build
 - **Description**: Run GitHub CodeQL analysis for Rust on pushes, pull requests, and the weekly schedule.
-- **Verification**: CodeQL completes without an unresolved blocking finding.
+- **Verification**: The pinned `github/codeql-action` init/analyze revisions
+  resolve to the reviewed `v4.37.6` patch and CodeQL completes without an
+  unresolved blocking finding.
 - **Covers**: REQ-018, REQ-020
 - **Status**: Automated
 

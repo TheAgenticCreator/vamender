@@ -373,3 +373,19 @@
   status-polling deduplication validation locally.
 - **Status**: automated regression coverage complete; interactive visual
   review remains optional beta-acceptance evidence, not a release blocker
+
+## 2026-08-12 — CodeQL action patch maintenance
+
+- **Author**: TheAgenticCreator
+- **Type**: security automation maintenance
+- **REQs affected**: REQ-020, REQ-027
+- **Changes**: Replaced the stale Dependabot proposal with maintainer-authored
+  `github/codeql-action` `v4.37.6` pins for both initialization and analysis.
+  The original bot branch is not eligible for this repository because its
+  author and committer metadata cannot pass the mandatory pseudonymous-history
+  gate.
+- **Evidence**: Reviewed GitHub's official CodeQL Action documentation and
+  changelog, then require the Windows CodeQL workflow and full Windows CI gate
+  to pass on the rewritten maintainer-authored commit before it reaches main.
+- **Status**: pending GitHub Actions verification and retirement of the stale
+  Dependabot pull request
