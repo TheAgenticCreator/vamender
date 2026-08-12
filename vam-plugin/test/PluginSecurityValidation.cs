@@ -73,7 +73,11 @@ internal static class PluginSecurityValidation
         MethodInfo setStatus = pluginType.GetMethod(
             "SetStatus",
             BindingFlags.Instance | BindingFlags.NonPublic);
-        Require(setStatus != null, "VaMender must provide SetStatus.");
+        if (setStatus == null)
+        {
+            throw new InvalidOperationException(
+                "VaMender must provide SetStatus.");
+        }
 
         SuperController.LogMessageCount = 0;
         setStatus.Invoke(plugin, new object[] { "READY", "Stable state" });
