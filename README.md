@@ -147,6 +147,11 @@ sessions. During an upgrade, Setup refuses to interrupt active or queued work,
 stops an idle host before replacing its executable, checksum-verifies the new
 plugin, and backs up and retires older VaMender plugin revisions.
 
+The host is a per-user background app rather than a Windows Service: Windows
+Services cannot safely own a normal user's notification-area icon. It is
+disabled by clearing **Start with Windows** from its tray menu, then choosing
+**Exit VaMender** when you also want to stop the current background host.
+
 Right-click the VaMender shield in the Windows notification area to:
 
 - launch Virt-a-Mate;
@@ -162,7 +167,7 @@ Closing VaM does not close VaMender. This is intentional: VaM's plugin sandbox
 cannot safely launch or supervise an external package-repair engine, and the
 host must already be available when VaM starts. If you exit it accidentally,
 choose **VaMender** from the Windows Start menu, or run
-`%LOCALAPPDATA%\VaMender\vamender.exe`; the installed configuration starts the
+`%LOCALAPPDATA%\VaMender\vamender-host.exe`; the installed configuration starts the
 tray host again. Re-enable **Start with Windows** from its tray menu if needed.
 
 The release also provides `vamender-windows-x64.zip` for advanced portable CLI
@@ -375,7 +380,7 @@ Setup:
 ```powershell
 .\tools\build-vam-plugin.ps1 -VaMPath "D:\VaM"
 .\tools\package-vam-plugin.ps1 `
-  -OutputPath .\dist\AgenticCreator.VaMender.1.var
+  -OutputPath .\dist\AgenticCreator.VaMender.2.var
 ```
 
 The build script deliberately uses the .NET Framework 3.5 compiler because

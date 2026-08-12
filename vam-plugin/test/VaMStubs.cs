@@ -337,6 +337,7 @@ public class SuperController
     }
 
     public static SuperController singleton = new SuperController();
+    public static int LogMessageCount;
     public bool isLoading;
     public string LoadedSceneName = "";
     public bool disablePackages;
@@ -358,6 +359,7 @@ public class SuperController
 
     public static void LogMessage(string value)
     {
+        LogMessageCount++;
     }
 
     public List<Atom> GetAtoms()

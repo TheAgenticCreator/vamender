@@ -7,6 +7,7 @@ use std::os::windows::process::CommandExt;
 use std::process::{Command as ProcessCommand, Stdio};
 
 const TASK_NAME: &str = "VaMender Engine Host";
+const HOST_EXECUTABLE_NAME: &str = "vamender-host.exe";
 
 fn local_app_data() -> Result<PathBuf> {
     let value = std::env::var_os("LOCALAPPDATA")
@@ -83,7 +84,25 @@ fn run_reg(_arguments: &[&str]) -> Result<()> {
 }
 
 #[cfg(windows)]
-fn start_host(executable: &Path, packages: &Path, backup: &Path) -> Result<()> {
+fn start_host(executable: &Path) -> Result<()> {
+    const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+    ProcessCommand::new(executable)
+        .creation_flags(CREATE_NO_WINDOW)
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+        .with_context(|| format!("cannot start installed engine {}", executable.display()))?;
+    Ok(())
+}
+
+#[cfg(not(windows))]
+fn start_host(_executable: &Path) -> Result<()> {
+    bail!("automatic VaM integration is supported only on Windows")
+}
+
+#[cfg(windows)]
+fn start_legacy_host(executable: &Path, packages: &Path, backup: &Path) -> Result<()> {
     const CREATE_NO_WINDOW: u32 = 0x0800_0000;
     ProcessCommand::new(executable)
         .arg("host")
@@ -100,7 +119,7 @@ fn start_host(executable: &Path, packages: &Path, backup: &Path) -> Result<()> {
 }
 
 #[cfg(not(windows))]
-fn start_host(_executable: &Path, _packages: &Path, _backup: &Path) -> Result<()> {
+fn start_legacy_host(_executable: &Path, _packages: &Path, _backup: &Path) -> Result<()> {
     bail!("automatic VaM integration is supported only on Windows")
 }
 
@@ -147,6 +166,10 @@ fn host_state(vam_root: &Path) -> PathBuf {
         .join("Bridge")
 }
 
+fn is_vamender_host_process(name: &str) -> bool {
+    name.eq_ignore_ascii_case("vamender.exe") || name.eq_ignore_ascii_case(HOST_EXECUTABLE_NAME)
+}
+
 fn engine_is_busy(state: &Path) -> Result<bool> {
     if state.join("request.json").is_file() {
         return Ok(true);
@@ -176,7 +199,7 @@ fn stop_existing_host(vam_root: &Path) -> Result<()> {
     let Some(name) = process_name(pid)? else {
         return remove_engine_lock(&lock);
     };
-    if !name.eq_ignore_ascii_case("vamender.exe") {
+    if !is_vamender_host_process(&name) {
         bail!("engine lock PID {pid} belongs to {name}; refusing to stop an unrelated process");
     }
     if engine_is_busy(&state)? {
@@ -211,6 +234,8 @@ struct InstalledHostConfiguration {
     addon_packages: PathBuf,
     backup: PathBuf,
     executable: PathBuf,
+    #[serde(default)]
+    host_executable: Option<PathBuf>,
     vam_root: PathBuf,
 }
 
@@ -225,6 +250,28 @@ fn installed_host_configuration(install_root: &Path) -> Result<Option<InstalledH
     )
     .with_context(|| format!("cannot parse {}", path.display()))?;
     Ok(Some(value))
+}
+
+#[cfg(windows)]
+#[allow(dead_code)]
+pub(super) fn installed_host_arguments() -> Result<BridgeArgs> {
+    let install_root = local_app_data()?;
+    let configuration = installed_host_configuration(&install_root)?
+        .context("VaMender is not installed for this Windows user")?;
+    Ok(BridgeArgs {
+        root: configuration.addon_packages,
+        backup: configuration.backup,
+        state: None,
+        out: None,
+        poll_ms: 500,
+        once: false,
+    })
+}
+
+#[cfg(not(windows))]
+#[allow(dead_code)]
+pub(super) fn installed_host_arguments() -> Result<BridgeArgs> {
+    bail!("the VaMender tray host is supported only on Windows")
 }
 
 fn configured_vam_root(install_root: &Path) -> Result<Option<PathBuf>> {
@@ -261,15 +308,19 @@ pub(super) fn restart_installed_host() -> Result<bool> {
             .parse::<u32>()
             .map_err(|error| io::Error::new(io::ErrorKind::InvalidData, error))
     }) {
-        if process_name(pid)?.is_some_and(|name| name.eq_ignore_ascii_case("vamender.exe")) {
+        if process_name(pid)?.is_some_and(|name| is_vamender_host_process(&name)) {
             return Ok(true);
         }
     }
-    start_host(
-        &configuration.executable,
-        &configuration.addon_packages,
-        &configuration.backup,
-    )?;
+    if let Some(host_executable) = configuration.host_executable.filter(|path| path.is_file()) {
+        start_host(&host_executable)?;
+    } else {
+        start_legacy_host(
+            &configuration.executable,
+            &configuration.addon_packages,
+            &configuration.backup,
+        )?;
+    }
     Ok(true)
 }
 
@@ -278,20 +329,11 @@ pub(super) fn restart_installed_host() -> Result<bool> {
     Ok(false)
 }
 
-fn task_command(executable: &Path, packages: &Path, backup: &Path) -> Result<String> {
-    let values = [executable, packages, backup];
-    if values
-        .iter()
-        .any(|path| path.to_string_lossy().contains('"'))
-    {
+fn startup_command(executable: &Path) -> Result<String> {
+    if executable.to_string_lossy().contains('"') {
         bail!("VaMender installation paths cannot contain a double quote");
     }
-    Ok(format!(
-        "\"{}\" host \"{}\" --backup \"{}\"",
-        executable.display(),
-        packages.display(),
-        backup.display()
-    ))
+    Ok(format!("\"{}\"", executable.display()))
 }
 
 #[cfg(windows)]
@@ -309,14 +351,16 @@ pub(super) fn start_with_windows_enabled() -> bool {
 }
 
 #[cfg(windows)]
-pub(super) fn set_start_with_windows(
-    enabled: bool,
-    executable: &Path,
-    packages: &Path,
-    backup: &Path,
-) -> Result<()> {
+pub(super) fn set_start_with_windows(enabled: bool) -> Result<()> {
     if enabled {
-        let command = task_command(executable, packages, backup)?;
+        let install_root = local_app_data()?;
+        let configuration = installed_host_configuration(&install_root)?
+            .context("VaMender is not installed for this Windows user")?;
+        let host_executable = configuration
+            .host_executable
+            .filter(|path| path.is_file())
+            .context("the installed VaMender background host is missing; run Setup to repair it")?;
+        let command = startup_command(&host_executable)?;
         run_reg(&[
             "ADD",
             r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",
@@ -342,8 +386,8 @@ pub(super) fn set_start_with_windows(
 
 const PLUGIN_CREATOR: &str = "AgenticCreator";
 const PLUGIN_PACKAGE: &str = "VaMender";
-const PLUGIN_REVISION: u32 = 1;
-const PLUGIN_FILENAME: &str = "AgenticCreator.VaMender.1.var";
+const PLUGIN_REVISION: u32 = 2;
+const PLUGIN_FILENAME: &str = "AgenticCreator.VaMender.2.var";
 
 fn preserve_plugin(package: &Path, backup: &Path) -> Result<PathBuf> {
     let name = package.file_name().context("plugin VAR has no filename")?;
@@ -449,11 +493,33 @@ pub(super) fn install_host(arguments: InstallHostArgs) -> Result<()> {
             )
         })?;
     }
+    let host_source = current
+        .parent()
+        .context("VaMender executable has no parent folder")?
+        .join(HOST_EXECUTABLE_NAME);
+    if !host_source.is_file() {
+        bail!(
+            "cannot find {} next to {}; run the complete VaMender Setup package",
+            HOST_EXECUTABLE_NAME,
+            current.display()
+        );
+    }
+    let installed_host = install_root.join(HOST_EXECUTABLE_NAME);
+    if host_source != installed_host {
+        fs::copy(&host_source, &installed_host).with_context(|| {
+            format!(
+                "cannot install background host {} as {}",
+                host_source.display(),
+                installed_host.display()
+            )
+        })?;
+    }
 
     let configuration = json!({
         "addonPackages": packages,
         "backup": backup,
         "executable": installed,
+        "hostExecutable": installed_host,
         "vamRoot": vam_root,
         "installedAtUnix": SystemTime::now()
             .duration_since(UNIX_EPOCH)
@@ -470,7 +536,7 @@ pub(super) fn install_host(arguments: InstallHostArgs) -> Result<()> {
         install_plugin(plugin, &packages, &backup)?;
     }
 
-    let command = task_command(&installed, &packages, &backup)?;
+    let command = startup_command(&installed_host)?;
     let _ = run_schtasks(&["/End", "/TN", TASK_NAME]);
     let _ = run_schtasks(&["/Delete", "/F", "/TN", TASK_NAME]);
     run_reg(&[
@@ -484,10 +550,10 @@ pub(super) fn install_host(arguments: InstallHostArgs) -> Result<()> {
         &command,
         "/f",
     ])?;
-    start_host(&installed, &packages, &backup)?;
+    start_host(&installed_host)?;
     println!("VaMender automatic integration installed.");
     println!("VaM: {}", vam_root.display());
-    println!("Engine: {}", installed.display());
+    println!("Background host: {}", installed_host.display());
     println!("Library: {}", packages.display());
     println!("Backup: {}", backup.display());
     println!("No PowerShell script or open console is required.");
@@ -519,6 +585,7 @@ pub(super) fn uninstall_host(arguments: UninstallHostArgs) -> Result<()> {
     let _ = run_schtasks(&["/Delete", "/F", "/TN", TASK_NAME]);
     if arguments.purge {
         let executable = install_root.join("vamender.exe");
+        let host_executable = install_root.join(HOST_EXECUTABLE_NAME);
         let configuration = install_root.join("host.json");
         if configuration.exists() {
             fs::remove_file(&configuration)
@@ -527,6 +594,12 @@ pub(super) fn uninstall_host(arguments: UninstallHostArgs) -> Result<()> {
         if executable.exists() && std::env::current_exe().ok().as_deref() != Some(&executable) {
             fs::remove_file(&executable)
                 .with_context(|| format!("cannot remove {}", executable.display()))?;
+        }
+        if host_executable.exists()
+            && std::env::current_exe().ok().as_deref() != Some(&host_executable)
+        {
+            fs::remove_file(&host_executable)
+                .with_context(|| format!("cannot remove {}", host_executable.display()))?;
         }
     }
     println!(
@@ -553,17 +626,20 @@ mod tests {
     }
 
     #[test]
-    fn quotes_startup_command_paths_with_spaces() -> Result<()> {
-        let command = task_command(
-            Path::new(r"C:\Users\Test User\VaMender\vamender.exe"),
-            Path::new(r"D:\Virt a Mate\AddonPackages"),
-            Path::new(r"E:\VaM Backups"),
-        )?;
+    fn quotes_background_host_startup_path_with_spaces() -> Result<()> {
+        let command = startup_command(Path::new(r"C:\Users\Test User\VaMender\vamender-host.exe"))?;
         assert_eq!(
             command,
-            "\"C:\\Users\\Test User\\VaMender\\vamender.exe\" host \"D:\\Virt a Mate\\AddonPackages\" --backup \"E:\\VaM Backups\""
+            "\"C:\\Users\\Test User\\VaMender\\vamender-host.exe\""
         );
         Ok(())
+    }
+
+    #[test]
+    fn recognizes_current_and_legacy_host_process_names() {
+        assert!(is_vamender_host_process("vamender-host.exe"));
+        assert!(is_vamender_host_process("VaMender.exe"));
+        assert!(!is_vamender_host_process("VaM.exe"));
     }
 
     #[test]
@@ -587,7 +663,7 @@ mod tests {
         fs::create_dir_all(&source_root)?;
         fs::create_dir_all(&packages)?;
         fs::create_dir_all(&backup)?;
-        let name = "AgenticCreator.VaMender.1.var";
+        let name = "AgenticCreator.VaMender.2.var";
         let source = source_root.join(name);
         fs::write(&source, b"new")?;
         fs::write(packages.join(name), b"old")?;
@@ -604,6 +680,40 @@ mod tests {
                     .join(format!("{old_hash}-{name}")),
             )?,
             b"old"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn retires_and_preserves_older_plugin_revisions() -> Result<()> {
+        let temporary = tempfile::tempdir()?;
+        let source_root = temporary.path().join("release");
+        let packages = temporary.path().join("AddonPackages");
+        let backup = temporary.path().join("backup");
+        fs::create_dir_all(&source_root)?;
+        fs::create_dir_all(&packages)?;
+        fs::create_dir_all(&backup)?;
+
+        let source = source_root.join(PLUGIN_FILENAME);
+        let older = packages.join("AgenticCreator.VaMender.1.var");
+        let newer = packages.join("AgenticCreator.VaMender.3.var");
+        fs::write(&source, b"revision-two")?;
+        fs::write(&older, b"revision-one")?;
+        fs::write(&newer, b"revision-three")?;
+
+        install_plugin(&source, &packages, &backup)?;
+
+        assert_eq!(fs::read(packages.join(PLUGIN_FILENAME))?, b"revision-two");
+        assert!(!older.exists());
+        assert_eq!(fs::read(&newer)?, b"revision-three");
+        let old_hash = format!("{:x}", Sha256::digest(b"revision-one"));
+        assert_eq!(
+            fs::read(
+                backup
+                    .join("install-history")
+                    .join(format!("{old_hash}-AgenticCreator.VaMender.1.var")),
+            )?,
+            b"revision-one"
         );
         Ok(())
     }

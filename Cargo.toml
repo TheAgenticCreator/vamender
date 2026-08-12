@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 [package]
 name = "vamender"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.88"
 build = "build.rs"
@@ -20,6 +20,10 @@ LegalCopyright = "Copyright (c) 2026 VaMender contributors"
 [[bin]]
 name = "vamender"
 path = "src/main.rs"
+
+[[bin]]
+name = "vamender-host"
+path = "src/vamender_host.rs"
 
 [dependencies]
 anyhow = "1.0"

@@ -96,7 +96,7 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 ## TEST-011
 - **Title**: Plugin sandbox security validation
 - **Type**: integration
-- **Description**: Inspect the plugin assembly for restricted namespaces, types, members, assemblies, and unmanaged modules, and validate momentary action behavior.
+- **Description**: Inspect the plugin assembly for restricted namespaces, types, members, assemblies, and unmanaged modules; validate momentary action behavior; and assert repeated unchanged status polling does not write duplicate VaM log entries.
 - **Verification**: `PluginSecurityValidation` exits 0.
 - **Covers**: REQ-015, REQ-016, REQ-018, REQ-020
 - **Status**: Automated
@@ -104,7 +104,7 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 ## TEST-012
 - **Title**: Session Plugin VAR packaging validation
 - **Type**: build
-- **Description**: Package `AgenticCreator.VaMender.1.var` and validate required metadata and payload layout.
+- **Description**: Package `AgenticCreator.VaMender.2.var` and validate required metadata and payload layout.
 - **Verification**: `tools/package-vam-plugin.ps1` exits 0.
 - **Covers**: REQ-001, REQ-016, REQ-020, REQ-021
 - **Status**: Automated
@@ -154,18 +154,18 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 ## TEST-018
 - **Title**: Disposable-library CLI smoke test
 - **Type**: e2e
-- **Description**: Run `tools/run-release-scenarios.ps1` against synthetic disposable libraries, covering clean and deep inventory, missing dependencies, VaM-log-aware planning, metadata repair, corrupt archives, conservative migration, broken-library quarantine, support-report generation, and checksum-verified restore.
-- **Verification**: Every scenario returns exit code 0, report-level findings match the fixture, mutation cases create backup manifests before changes, and the evidence record includes reports, hashes, restore output, and observed result. VaM must load a restored representative library after a fresh rescan during manual beta acceptance.
+- **Description**: Run the source-controlled ten-scenario `tools/run-release-scenarios.ps1` corpus against synthetic disposable libraries: nested/Unicode inventory, fresh/stale/absent VaM logs, metadata repair, BZIP2 and corrupt/unsupported archives, filename collisions, version migration conflicts, dependency closure, mutation/restore safety, bridge protocol containment, and support-report privacy.
+- **Verification**: Every asserted scenario passes, read-only hashes are unchanged, mutation cases create checksum-verified backup manifests before changes, and the evidence record retains reports, hashes, restore output, screenshots, and observed result. VaM must load a restored representative library after a fresh rescan during manual beta acceptance.
 - **Covers**: REQ-003, REQ-004, REQ-005, REQ-006, REQ-007, REQ-008, REQ-009, REQ-010, REQ-011, REQ-012, REQ-013, REQ-014, REQ-019, REQ-022
-- **Status**: Manual accepted locally on 2026-08-04; final tagged CI evidence remains required
+- **Status**: Automated locally on 2026-08-12; CI runs the corpus on every Windows packaging and tagged-release build
 
 ## TEST-019
 - **Title**: Installer and uninstall smoke test
 - **Type**: e2e
-- **Description**: Install as a standard Windows user, reject an unsafe backup path, confirm automatic engine startup and plugin installation, then uninstall and confirm backups/reports remain.
-- **Verification**: The procedure completes without elevation and records retained user data and removed application components.
+- **Description**: Use `tools/run-isolated-vam-regression.ps1` and `tools/run-isolated-installer-regression.ps1` against the marker-protected temporary VaM copy with redirected `LOCALAPPDATA`; the latter runs the actual Setup and uninstaller while upgrading a seeded plugin revision 1 to revision 2.
+- **Verification**: The procedures record GUI-subsystem validation, direct startup registration, matching plugin checksum, revision-1 preservation, revision-2 installation, generated reports, cooperative lock cleanup, retained backup evidence, real Setup uninstall, and restored user state.
 - **Covers**: REQ-002, REQ-017, REQ-022
-- **Status**: Manual accepted locally on 2026-08-05 with install, uninstall-retention, and reinstall evidence; final tagged CI evidence remains required
+- **Status**: Automated isolated host and actual silent Setup lifecycle passed locally on 2026-08-12; interactive installer UI acceptance remains required for beta release
 
 ## TEST-020
 - **Title**: Live VaM plugin workflow
@@ -198,3 +198,16 @@ result. Environment-dependent manual tests remain mandatory for beta release.
 - **Verification**: `git ls-files -ci --exclude-standard` reports no ignored tracked files; `git check-ignore` matches representative local state; and `git check-attr` reports the required Windows text, hook, and binary classifications.
 - **Covers**: REQ-020, REQ-023
 - **Status**: Local automated
+
+## TEST-028
+- **Title**: Windows tray-host lifecycle
+- **Type**: integration
+- **Description**: Build and install on Windows x64, verify the notification-area
+  icon and menu actions, confirm Start with Windows registers the dedicated
+  GUI-subsystem host without a console, and verify disabled startup plus a safe
+  tray exit.
+- **Verification**: `tools/run-isolated-vam-regression.ps1` passes the structural
+  lifecycle checks on a temporary VaM copy; the final beta run additionally
+  verifies tray interaction and deduplicated in-VaM polling manually.
+- **Covers**: REQ-028
+- **Status**: Manual required for beta release

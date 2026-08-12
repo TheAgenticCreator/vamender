@@ -23,9 +23,9 @@ $releaseUrl =
 $baselineSetupText = "official VaMender Setup"
 $releaseSetupText = "latest beta Setup build"
 $baselineAssemblyHash =
-    "edf77bb3df1d70a577df9fb087b78fe7d5e946816ead666d1a469f53a7fb1f28"
+    "ddb739c7f78a368914216f443f47877e0d7df619f2146c6fd64b482d02261d50"
 $normalizedSourceHash =
-    "ba487c8b6519a0a37493259797d7020fbe27770418f3816e79e7049095bbb31b"
+    "768eb254b5a17da04d6b159a8680ca8daf75be1aaf9bc276e6fba8b612d42f11"
 
 function Get-Sha256Bytes {
     param([Parameter(Mandatory = $true)][byte[]]$Bytes)

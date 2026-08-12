@@ -179,7 +179,6 @@ mod windows {
         ids: &MenuIds,
         startup: &CheckMenuItem,
         arguments: &BridgeArgs,
-        executable: &Path,
     ) -> Result<bool> {
         if id == &ids.launch_vam {
             launch_vam(&arguments.root)?;
@@ -189,9 +188,7 @@ mod windows {
             open_folder(&arguments.backup)?;
         } else if id == &ids.startup {
             let requested = startup.is_checked();
-            if let Err(error) =
-                set_start_with_windows(requested, executable, &arguments.root, &arguments.backup)
-            {
+            if let Err(error) = set_start_with_windows(requested) {
                 startup.set_checked(!requested);
                 return Err(error);
             }
@@ -211,7 +208,6 @@ mod windows {
     }
 
     pub(super) fn run(arguments: BridgeArgs) -> Result<()> {
-        let executable = std::env::current_exe().context("cannot locate VaMender executable")?;
         let shutdown_request = state_folder(&arguments).join(SHUTDOWN_FILE);
         match fs::remove_file(&shutdown_request) {
             Ok(()) => {}
@@ -265,7 +261,7 @@ mod windows {
             }
             pump_windows_messages();
             while let Ok(event) = MenuEvent::receiver().try_recv() {
-                match handle_action(event.id(), &ids, &startup, &arguments, &executable) {
+                match handle_action(event.id(), &ids, &startup, &arguments) {
                     Ok(exit) => exit_requested |= exit,
                     Err(error) => message("VaMender", &error.to_string(), true),
                 }

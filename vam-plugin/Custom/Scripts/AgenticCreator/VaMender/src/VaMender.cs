@@ -8,7 +8,7 @@ namespace VaMenderPlugin
 {
     public class VaMender : MVRScript
     {
-        private const string Version = "0.1.0";
+        private const string Version = "0.2.0";
         private const string ReleaseUrl =
             "https://github.com/TheAgenticCreator/vamender/releases?beta=1";
 
@@ -22,6 +22,9 @@ namespace VaMenderPlugin
             new List<MomentaryAction>();
         private float _nextDefaultLauncherCheck;
         private float _nextEngineCheck;
+        private string _lastStatus;
+        private string _lastStatusDetails;
+        private bool _operationBusy;
 
         public override void Init()
         {
@@ -168,6 +171,11 @@ namespace VaMenderPlugin
 
         private void SetOperationBusy(bool busy)
         {
+            if (_operationBusy == busy)
+            {
+                return;
+            }
+            _operationBusy = busy;
             foreach (MomentaryAction action in _operationActions)
             {
                 action.SetInteractable(!busy);
@@ -244,6 +252,12 @@ namespace VaMenderPlugin
 
         private void SetStatus(string status, string details)
         {
+            if (_lastStatus == status && _lastStatusDetails == details)
+            {
+                return;
+            }
+            _lastStatus = status;
+            _lastStatusDetails = details;
             _status.val = "VAMENDER — " + status;
             _details.val = details;
             SuperController.LogMessage(
