@@ -30,7 +30,7 @@
     "description": "",
     "requirement_id": "REQ-003",
     "type": "e2e",
-    "verification_method": "Run check and check --deep on a disposable representative library and verify no package bytes or paths change.",
+    "verification_method": "Run synthetic-corpus scenario 01 with check and check --deep on nested Unicode VARs and verify every package hash and path remains unchanged.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -42,7 +42,7 @@
     "description": "",
     "requirement_id": "REQ-004",
     "type": "integration",
-    "verification_method": "Run planning with fresh, stale, and absent VaM logs and verify runtime-confirmed language appears only with fresh matching evidence.",
+    "verification_method": "Run synthetic-corpus scenario 02 with fresh, stale, and absent VaM logs and verify runtime-confirmed language appears only with fresh matching evidence.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -54,7 +54,7 @@
     "description": "",
     "requirement_id": "REQ-005",
     "type": "integration",
-    "verification_method": "Run the metadata reconstruction and false-label Rust tests, including explicit-license and unknown-license behavior.",
+    "verification_method": "Run the metadata reconstruction and false-label Rust tests plus synthetic-corpus scenario 03, including missing, invalid, material-label, descriptive-label, explicit-license, and unknown-license behavior.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -66,7 +66,7 @@
     "description": "",
     "requirement_id": "REQ-006",
     "type": "integration",
-    "verification_method": "Run both filename repair Rust tests plus supported archive-header validation with verified backup evidence.",
+    "verification_method": "Run filename-repair scenarios 05 and 08 plus archive scenario 04; verify unambiguous renames, byte-identical duplicate archival, collision refusal, BZIP2 inspection, and diagnostic handling of unsupported LZMA, CRC-corrupt, and malformed archives.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -78,7 +78,7 @@
     "description": "",
     "requirement_id": "REQ-007",
     "type": "integration",
-    "verification_method": "Run exact-reference fallback and dependency-closure tests and verify plugin references stay exact while safe non-plugin references relink.",
+    "verification_method": "Run exact-reference fallback and synthetic-corpus scenarios 06 and 07; verify plugin references stay exact while safe non-plugin references relink and payload or metadata conflicts remain untouched.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -90,7 +90,7 @@
     "description": "",
     "requirement_id": "REQ-008",
     "type": "integration",
-    "verification_method": "Run dependency-closure, missing-provider-member, and VaM missing-clothing warning Rust tests.",
+    "verification_method": "Run dependency-closure, missing-provider-member, and VaM missing-clothing warning Rust tests plus synthetic-corpus scenario 07.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -102,7 +102,7 @@
     "description": "",
     "requirement_id": "REQ-009",
     "type": "integration",
-    "verification_method": "Run migration rewrite/archive and metadata payload-conflict Rust tests and confirm unsafe candidates remain installed.",
+    "verification_method": "Run migration rewrite/archive and metadata payload-conflict Rust tests plus synthetic-corpus scenario 06; confirm unsafe candidates remain installed.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -114,7 +114,7 @@
     "description": "",
     "requirement_id": "REQ-010",
     "type": "integration",
-    "verification_method": "Run applied repair/migration tests and verify source checksum, backup checksum, and manifest record precede live mutation.",
+    "verification_method": "Run applied repair/migration corpus scenarios 03, 05, 06, 07, and 08 and verify source checksum, backup checksum, and manifest record precede every live mutation.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -126,7 +126,7 @@
     "description": "",
     "requirement_id": "REQ-011",
     "type": "integration",
-    "verification_method": "Run applied rewrite tests and verify only a validated temporary archive reaches the destination and post-change checks pass.",
+    "verification_method": "Run applied rewrite corpus scenarios 03, 05, 06, and 08 and verify only a validated temporary archive reaches the destination and post-change checks pass.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -138,7 +138,7 @@
     "description": "",
     "requirement_id": "REQ-012",
     "type": "integration",
-    "verification_method": "Exercise normal, recent-subset, overwrite-conflict, checksum-failure, and traversal-rejection restore paths on a disposable root.",
+    "verification_method": "Exercise corpus scenario 08 normal, recent-subset, overwrite-conflict, checksum-failure, and traversal-rejection restore paths on a disposable root.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -150,7 +150,7 @@
     "description": "",
     "requirement_id": "REQ-013",
     "type": "integration",
-    "verification_method": "Run every public command and verify the three top-level report files plus full-run _details evidence and deterministic unresolved IDs.",
+    "verification_method": "Run the complete synthetic corpus and verify the three top-level report files plus full-run _details evidence and deterministic unresolved IDs for every applicable scenario.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -162,7 +162,7 @@
     "description": "",
     "requirement_id": "REQ-014",
     "type": "cli",
-    "verification_method": "Verify help safety text, read-only command immutability, dry-run defaults, and rejection of applied operations without a safe backup root.",
+    "verification_method": "Verify help safety text, corpus read-only immutability, dry-run defaults, and scenario 08 rejection of applied operations without a safe backup root.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -186,7 +186,7 @@
     "description": "",
     "requirement_id": "REQ-016",
     "type": "e2e",
-    "verification_method": "Pass C# compile/type-load/security validation, then exercise busy locking, status, successful engine operation, and rescan in VaM 1.22.0.13. Record the 1.22.0.12 expectation separately; do not claim it was tested.",
+    "verification_method": "Pass C# compile/type-load/security validation, including momentary action release, operation locking, and duplicate-status log suppression. Then exercise a lifecycle transition, successful engine operation, rescan, and visible status behavior in VaM 1.22.0.13. Record the 1.22.0.12 expectation separately; do not claim it was tested.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -198,7 +198,7 @@
     "description": "",
     "requirement_id": "REQ-017",
     "type": "e2e",
-    "verification_method": "Pass host-install Rust tests and Setup build, then upgrade with a running idle host and verify pre-replacement shutdown without a Restart Manager warning, reject active/queued work without changes, verify executable/plugin checksums, back up and retire the older VaMender plugin revision, restart exactly one healthy host, reject unsafe paths, uninstall, and retain backups/reports.",
+    "verification_method": "Pass host-install Rust tests, Setup build, tools/run-isolated-vam-regression.ps1, and tools/run-isolated-installer-regression.ps1 against a marker-protected temporary VaM copy with redirected LOCALAPPDATA. Verify GUI-host startup registration, plugin checksum, revision-1 preservation/revision-2 retirement, bridge check, cooperative stop, real Setup uninstall, retained backup evidence, and restoration of the real user's startup registration.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -222,7 +222,7 @@
     "description": "",
     "requirement_id": "REQ-019",
     "type": "integration",
-    "verification_method": "Exercise Unicode, nesting, casing, supported compression, malformed archive, and tar-compatible fallback fixtures without evidence loss.",
+    "verification_method": "Exercise synthetic-corpus scenarios 01 and 04 for Unicode, nesting, casing, BZIP2 support, unsupported-LZMA diagnosis, CRC corruption, and malformed archives without evidence loss.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -258,7 +258,7 @@
     "description": "",
     "requirement_id": "REQ-022",
     "type": "e2e",
-    "verification_method": "Run tools/run-release-scenarios.ps1 on Windows and retain its JSON summary, reports, screenshots, backup manifests, mutation, restore, and privacy-safe support-bundle evidence; then record supported-environment install, VaM rescan, report review, and uninstall evidence on a disposable representative library.",
+    "verification_method": "Run tools/new-isolated-vam-test-environment.ps1 followed by tools/run-isolated-vam-regression.ps1 and tools/run-isolated-installer-regression.ps1 on Windows. Retain the synthetic-corpus and installer JSON summaries, reports, screenshots, backup manifests, mutation, restore, privacy-safe support bundle, versioned-plugin upgrade, real Setup uninstall, and host lifecycle evidence. Then record supported-environment VaM Session Plugin rescan, status-polling review, and report review on that disposable representative library.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0
@@ -330,7 +330,7 @@
     "description": "",
     "requirement_id": "REQ-028",
     "type": "integration",
-    "verification_method": "Build and install on Windows x64, verify the notification-area icon and menu actions, confirm Start with Windows registration uses the hidden host command, confirm the bridge stays available while VaM opens and closes, reject external shutdown while work is active or queued, then request tray and external shutdown while idle and verify cooperative exit, lock cleanup, unchanged startup registration, and one healthy no-argument restart.",
+    "verification_method": "Run tools/run-isolated-vam-regression.ps1 to verify GUI PE subsystem, direct startup registration, bridge availability, cooperative idle shutdown, lock cleanup, and restored user registration. On the same isolated VaM copy, manually verify the notification-area icon/menu, no console at sign-in or Start-menu launch, stable deduplicated in-VaM status polling, bridge availability while VaM opens and closes, active-work shutdown refusal, and one healthy no-argument restart.",
     "input": {},
     "expected_behavior": {},
     "confidence": 1.0

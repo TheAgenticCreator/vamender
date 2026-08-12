@@ -66,21 +66,27 @@ roots cannot be overridden by a plugin request. See REQ-015.
 
 ### Windows tray host
 
-`src/app/tray_host.rs` owns the Windows notification-area icon and main-thread
-message pump while a large-stack worker runs the same constrained bridge used
-by the Session Plugin. Its menu launches VaM, opens reports/backups, toggles the
-per-user Run registration, shows compatibility and backup disclaimers, and
-requests cooperative shutdown. Closing VaM does not stop this host: VaM's
-sandbox cannot reliably spawn an external engine, so the host must already be
-available before a normal VaM launch. A no-argument installed executable and a
-Start-menu shortcut restart it without an external script. See REQ-028.
+`src/vamender_host.rs` is a Windows GUI-subsystem binary that starts the
+installed per-user host without allocating a console. It reads the installer
+configuration and delegates the notification-area icon and main-thread message
+pump to `src/app/tray_host.rs`, while a large-stack worker runs the same
+constrained bridge used by the Session Plugin. Its menu launches VaM, opens
+reports/backups, toggles the per-user Run registration, shows compatibility and
+backup disclaimers, and requests cooperative shutdown. Closing VaM does not
+stop this host: VaM's sandbox cannot reliably spawn an external engine, so the
+host must already be available before a normal VaM launch. A Start-menu shortcut
+restarts it without an external script or a visible console. It intentionally is
+not a Windows Service because the tray icon must run in the signed-in user's
+desktop session. See REQ-028.
 ### VaM Session Plugin
 
 `vam-plugin/Custom/Scripts/AgenticCreator/VaMender/src` implements a CLR 2
 Session Plugin. It builds the VaM-native panel, queues bridge requests, reports
 engine state, disables competing operations, launches the panel from VaM's
-default-scene UI, and requests a package rescan after successful work. It never
-opens or rewrites AddonPackages directly. See REQ-016 and REQ-018.
+default-scene UI, and requests a package rescan after successful work. It
+deduplicates unchanged status and busy-state updates so routine polling does not
+spam VaM's global log. It never opens or rewrites AddonPackages directly. See
+REQ-016 and REQ-018.
 
 ### Installation and packaging
 

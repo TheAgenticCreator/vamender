@@ -1,0 +1,52 @@
+[
+  {
+    "id": "01-read-only-inventory",
+    "title": "Read-only inventory with nested and Unicode VARs",
+    "requirements": ["REQ-003", "REQ-013", "REQ-014", "REQ-019"]
+  },
+  {
+    "id": "02-vam-log-planning",
+    "title": "Fresh, stale, and absent VaM-log planning",
+    "requirements": ["REQ-004", "REQ-013", "REQ-014"]
+  },
+  {
+    "id": "03-metadata-repair",
+    "title": "Missing, invalid, and false-label metadata repair",
+    "requirements": ["REQ-005", "REQ-010", "REQ-011", "REQ-014"]
+  },
+  {
+    "id": "04-archive-compatibility",
+    "title": "BZIP2 support plus LZMA, CRC, and malformed archive diagnosis",
+    "requirements": ["REQ-003", "REQ-006", "REQ-019"]
+  },
+  {
+    "id": "05-filename-repair",
+    "title": "Unambiguous rename, duplicate archive, and collision refusal",
+    "requirements": ["REQ-006", "REQ-010", "REQ-011"]
+  },
+  {
+    "id": "06-version-migration",
+    "title": "Safe migration, script exactness, and conflict refusal",
+    "requirements": ["REQ-007", "REQ-009", "REQ-010", "REQ-011"]
+  },
+  {
+    "id": "07-dependency-closure",
+    "title": "Dependency closure, safe relink, and missing-member diagnosis",
+    "requirements": ["REQ-007", "REQ-008", "REQ-010", "REQ-013"]
+  },
+  {
+    "id": "08-mutation-and-restore-safety",
+    "title": "Mutation gates and restore containment",
+    "requirements": ["REQ-010", "REQ-011", "REQ-012", "REQ-014"]
+  },
+  {
+    "id": "09-bridge-protocol",
+    "title": "Bridge request validation and root containment",
+    "requirements": ["REQ-013", "REQ-015"]
+  },
+  {
+    "id": "10-support-report",
+    "title": "Privacy-safe support-report bundle",
+    "requirements": ["REQ-018", "REQ-024"]
+  }
+]

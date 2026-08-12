@@ -10,6 +10,27 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-12
+
+### Changed
+
+- Start the tray host through a dedicated Windows GUI-subsystem executable so
+  sign-in and Start-menu launches do not open a command window.
+- Deduplicate unchanged VaM Session Plugin status and busy-state updates so
+  routine engine polling does not repeatedly write VaM log notifications.
+- Publish the bundled Session Plugin as `AgenticCreator.VaMender.2.var` so
+  Setup preserves and retires revision 1 safely instead of overwriting it.
+
+### Added
+
+- Add a source-controlled ten-scenario synthetic VAR corpus covering read-only
+  inventory, VaM logs, metadata, archive compatibility, filename repair,
+  version migration, dependency closure, mutation/restore safety, bridge
+  containment, and privacy-safe support reports.
+- Add marker-protected isolated VaM regression scripts that redirect host state
+  away from the primary library and verify host install, bridge operation,
+  shutdown, uninstall, and startup-registration restoration.
+
 ## [0.1.0] - 2026-08-09
 
 Initial beta release.
@@ -129,5 +150,6 @@ Initial beta release.
 - Validate the plugin against VaM 1.22.0.12 CLR 2 type loading and namespace,
   assembly, member, and unmanaged-module restrictions before packaging.
 
-[Unreleased]: https://github.com/TheAgenticCreator/vamender/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/TheAgenticCreator/vamender/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/TheAgenticCreator/vamender/releases/tag/v0.2.0
 [0.1.0]: https://github.com/TheAgenticCreator/vamender/releases/tag/v0.1.0

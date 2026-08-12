@@ -3,7 +3,7 @@
 # Release Scenario Evidence
 
 This page records the disposable-library beta checks run on 2026-08-04 with
-the installed `vamender 0.1.0` Windows engine. The runner creates synthetic
+the candidate `vamender 0.2.0` Windows engine. The runner creates synthetic
 VARs under the user temporary directory; it never changes the live VaM
 `AddonPackages` directory.
 

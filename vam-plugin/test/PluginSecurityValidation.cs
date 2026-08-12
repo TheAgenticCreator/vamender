@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Reflection.PortableExecutable;
@@ -19,6 +20,7 @@ internal static class PluginSecurityValidation
         }
         ValidatePluginAssembly(arguments[0]);
         ValidateMomentaryAction();
+        ValidateStatusDeduplication();
         return 0;
     }
 
@@ -52,6 +54,38 @@ internal static class PluginSecurityValidation
     private static void CountMomentaryAction()
     {
         _momentaryActionCalls++;
+    }
+
+    private static void ValidateStatusDeduplication()
+    {
+        VaMenderPlugin.VaMender plugin = new VaMenderPlugin.VaMender();
+        Type pluginType = typeof(VaMenderPlugin.VaMender);
+        pluginType.GetField(
+            "_status",
+            BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
+                plugin,
+                new JSONStorableString("Status", "initial"));
+        pluginType.GetField(
+            "_details",
+            BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
+                plugin,
+                new JSONStorableString("Engine activity", "initial"));
+        MethodInfo setStatus = pluginType.GetMethod(
+            "SetStatus",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        Require(setStatus != null, "VaMender must provide SetStatus.");
+
+        SuperController.LogMessageCount = 0;
+        setStatus.Invoke(plugin, new object[] { "READY", "Stable state" });
+        setStatus.Invoke(plugin, new object[] { "READY", "Stable state" });
+        Require(
+            SuperController.LogMessageCount == 1,
+            "Repeated unchanged status wrote duplicate VaM log entries.");
+        setStatus.Invoke(plugin, new object[] { "READY", "Changed detail" });
+        Require(
+            SuperController.LogMessageCount == 2,
+            "Changed status details were not published.");
+        Console.WriteLine("Status polling deduplication validation passed.");
     }
 
     private static void ValidatePluginAssembly(string path)

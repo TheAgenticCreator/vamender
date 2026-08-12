@@ -116,7 +116,7 @@ jobs:
         shell: pwsh
         run: >-
           ./tools/package-vam-plugin.ps1
-          -OutputPath ./target/AgenticCreator.VaMender.1.var
+          -OutputPath ./target/AgenticCreator.VaMender.2.var
 
   windows-release:
     name: Windows packaging smoke test
@@ -149,16 +149,23 @@ jobs:
         with:
           toolchain: 1.88.0
       - name: Build
-        run: cargo build --release --locked
+        run: cargo build --release --locked --bins
+      - name: Exercise synthetic VAR regression corpus
+        shell: pwsh
+        run: |
+          python --version
+          ./tools/run-release-scenarios.ps1 `
+            -EnginePath ./target/release/vamender.exe `
+            -OutputRoot ./target/release-scenarios
       - name: Build Session Plugin VAR
         shell: pwsh
         run: |
-          ./tools/package-vam-plugin.ps1 -OutputPath ./target/AgenticCreator.VaMender.1.var
+          ./tools/package-vam-plugin.ps1 -OutputPath ./target/AgenticCreator.VaMender.2.var
           $hash = (Get-FileHash `
-            ./target/AgenticCreator.VaMender.1.var `
+            ./target/AgenticCreator.VaMender.2.var `
             -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$hash  AgenticCreator.VaMender.1.var" |
-            Set-Content ./target/AgenticCreator.VaMender.1.var.sha256
+          "$hash  AgenticCreator.VaMender.2.var" |
+            Set-Content ./target/AgenticCreator.VaMender.2.var.sha256
       - name: Verify executable branding
         shell: pwsh
         run: |
@@ -174,6 +181,13 @@ jobs:
           if ($info.ProductVersion -ne $expectedVersion) {
             throw "ProductVersion $($info.ProductVersion) does not match $expectedVersion"
           }
+          $host = (Resolve-Path target\release\vamender-host.exe).Path
+          [byte[]]$hostBytes = [IO.File]::ReadAllBytes($host)
+          $peOffset = [BitConverter]::ToInt32($hostBytes, 0x3c)
+          $subsystem = [BitConverter]::ToUInt16($hostBytes, $peOffset + 24 + 68)
+          if ($subsystem -ne 2) {
+            throw "vamender-host.exe must use the Windows GUI subsystem; found $subsystem"
+          }
           Add-Type -AssemblyName System.Drawing
           $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($exe)
           if ($null -eq $icon) {
@@ -186,7 +200,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path dist | Out-Null
-          Copy-Item target\AgenticCreator.VaMender.1.var dist\
+          Copy-Item target\AgenticCreator.VaMender.2.var dist\
           iscc.exe .\installer\VaMender.iss
           if ($LASTEXITCODE -ne 0) {
             throw "Inno Setup failed with exit code $LASTEXITCODE"
@@ -204,8 +218,9 @@ jobs:
           name: vamender-windows-x64
           path: |
             target/release/vamender.exe
-            target/AgenticCreator.VaMender.1.var
-            target/AgenticCreator.VaMender.1.var.sha256
+            target/release/vamender-host.exe
+            target/AgenticCreator.VaMender.2.var
+            target/AgenticCreator.VaMender.2.var.sha256
             dist/VaMender-Setup-*.exe
             dist/VaMender-Setup-*.exe.sha256
           if-no-files-found: error

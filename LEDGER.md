@@ -299,3 +299,77 @@
 - **Changes**: Reverted the attempted normalized-source hash change after reproducing that Windows PowerShell 5.1 and GitHub Actions PowerShell 7 compute different values for the same source normalization path. Retained the original PowerShell 7 / GitHub Actions baseline hash, which is the authoritative release environment.
 - **Evidence**: The PR head `6b9234dd8f1b13ecda9d40789b4f5625e5ceb08a` contains `0.1.0` source. Local PowerShell 7 and the failed CI job both computed `ba487c8b6519a0a37493259797d7020fbe27770418f3816e79e7049095bbb31b`; only local Windows PowerShell 5.1 computed `01d6e76b6757899235e91e2e0c509a650dc08b3f2e38fc4dd8db03ea89362d51`. The committed DLL hash remains unchanged and validated.
 - **Status**: use PowerShell 7 for this release-stamp gate; rerun CI required
+
+## 2026-08-12 — Silent per-user tray host and VaM status-noise correction
+
+- **Author**: TheAgenticCreator
+- **Type**: Windows host lifecycle and Session Plugin reliability correction
+- **REQs affected**: REQ-016, REQ-017, REQ-020, REQ-028
+- **Changes**: Added the dedicated GUI-subsystem `vamender-host.exe` for Setup,
+  Start-menu, and per-user Windows startup; retained the console `vamender.exe`
+  only for CLI and installer commands; made the tray startup toggle register the
+  GUI host directly; and deduplicated unchanged Session Plugin status and busy
+  updates before they reach VaM's global log.
+- **Evidence**: `cargo test --all-targets --all-features --locked` passed 21
+  tests for each executable target; `cargo build --release --locked --bins`,
+  stamped-plugin security validation, VAR packaging, and Inno Setup compilation
+  passed. The host PE subsystem is Windows GUI (`2`). The CLR 2 plugin rebuilt
+  and type-loaded against the installed VaM 1.22.0.13 managed assemblies; its
+  neutral baseline SHA-256 is
+  `ddb739c7f78a368914216f443f47877e0d7df619f2146c6fd64b482d02261d50`,
+  with the PowerShell 7 normalized-source SHA-256
+  `768eb254b5a17da04d6b159a8680ca8daf75be1aaf9bc276e6fba8b612d42f11`.
+  `specsmith sync` completed and `specsmith audit` passed 29 checks.
+- **Status**: local build and governed evidence complete; live sign-in and
+  Session Plugin polling checks remain required before a future beta release
+
+## 2026-08-12 — GUI host CI regression guard
+
+- **Author**: TheAgenticCreator
+- **Type**: release automation hardening
+- **REQs affected**: REQ-020, REQ-028
+- **Changes**: Required both Windows CI and tagged-release builds to compile the
+  CLI and GUI host binaries, upload the GUI host to workflow artifacts, and
+  reject any host executable whose PE subsystem is not Windows GUI.
+- **Evidence**: The same PE-header assertion passed locally against the release
+  `vamender-host.exe` before the Inno Setup smoke build.
+- **Status**: ready for GitHub Actions verification on the next CI run
+
+## 2026-08-12 — v0.2.0 synthetic corpus and isolated release acceptance
+
+- **Author**: TheAgenticCreator
+- **Type**: release validation and versioned-plugin upgrade coverage
+- **REQs affected**: REQ-003, REQ-004, REQ-005, REQ-006, REQ-007, REQ-008,
+  REQ-009, REQ-010, REQ-011, REQ-012, REQ-013, REQ-014, REQ-015, REQ-017,
+  REQ-018, REQ-019, REQ-020, REQ-022, REQ-024, REQ-028
+- **Changes**: Added a source-controlled ten-scenario synthetic VAR corpus,
+  marker-protected temporary VaM runtime creation, direct host lifecycle
+  regression, and silent real-Setup install/uninstall regression. Promoted the
+  bundled Session Plugin to `AgenticCreator.VaMender.2.var`; installation now
+  preserves and retires revision 1 before using revision 2.
+- **Evidence**: Candidate evidence at
+  `C:\Users\trist\_\VAM\VaMender-ReleaseTest\VaMenderReleaseEvidence-v020-final`
+  records all ten corpus scenarios, GUI-host registration, a bridge request,
+  and a 30-second isolated VaM launch. Evidence at
+  `C:\Users\trist\_\VAM\VaMender-ReleaseTest\VaMenderInstallerEvidence-v020-final`
+  records actual silent Setup install, revision-1 backup, revision-2 install,
+  bridge check, uninstall, and restored user startup state. The primary VaM
+  library was not used as a test target.
+- **Status**: local v0.2.0 candidate validation complete; interactive Session
+  Plugin polling observation and tagged GitHub Actions evidence remain release
+  publication gates
+
+## 2026-08-12 — Session Plugin polling deduplication behavior gate
+
+- **Author**: TheAgenticCreator
+- **Type**: automated plugin behavior validation
+- **REQs affected**: REQ-016, REQ-020, REQ-028
+- **Changes**: Extended the CLR 2 plugin validation harness to invoke the
+  private status updater through VaM API stubs and count VaM log calls. The
+  gate rejects repeated unchanged status/detail pairs and requires a changed
+  detail to publish once.
+- **Evidence**: The source validation project built cleanly and the stamped
+  `0.2.0` DLL passed sandbox metadata, momentary action, operation-lock, and
+  status-polling deduplication validation locally.
+- **Status**: automated regression coverage complete; interactive visual
+  review remains optional beta-acceptance evidence, not a release blocker

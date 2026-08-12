@@ -168,7 +168,7 @@
     "id": "REQ-016",
     "version": 1,
     "title": "Sandboxed in-VaM control panel",
-    "description": "The CLR 2 Session Plugin remains in VaM's sandbox, exposes supported engine operations, blocks competing requests while busy, displays lifecycle state, rescans packages after successful mutation, and never performs unrestricted AddonPackages access itself.",
+    "description": "The CLR 2 Session Plugin remains in VaM's sandbox, exposes supported engine operations, blocks competing requests while busy, displays lifecycle state, publishes panel and VaM-log updates only when that state changes, rescans packages after successful mutation, and never performs unrestricted AddonPackages access itself.",
     "source": "vam-plugin/Custom/Scripts/AgenticCreator/VaMender/src",
     "status": "implemented",
     "test_ids": [
@@ -301,8 +301,8 @@
     "id": "REQ-028",
     "version": 1,
     "title": "Windows tray-host lifecycle",
-    "description": "The per-user Windows host presents a VaMender notification-area icon, starts the constrained engine without a console or external script, keeps it available across ordinary VaM launches, launches VaM on request, opens report and backup folders, reports product/version and safety information, toggles Start with Windows, and exits cooperatively after any in-flight operation finishes. The same busy-aware cooperative shutdown is available to Setup before executable replacement. Setup enables Start with Windows by default, and VaM's plugin sandbox is not used to spawn or terminate the host.",
-    "source": "src/app/tray_host.rs; src/app/bridge.rs; src/app/host_install.rs; README.md",
+    "description": "The per-user Windows host presents a VaMender notification-area icon, starts the constrained engine from a dedicated GUI-subsystem host executable without a console or external script, keeps it available across ordinary VaM launches, launches VaM on request, opens report and backup folders, reports product/version and safety information, toggles Start with Windows, and exits cooperatively after any in-flight operation finishes. The same busy-aware cooperative shutdown is available to Setup before executable replacement. Setup enables Start with Windows by default, and VaM's plugin sandbox is not used to spawn or terminate the host.",
+    "source": "src/vamender_host.rs; src/app/tray_host.rs; src/app/bridge.rs; src/app/host_install.rs; README.md",
     "status": "implemented",
     "test_ids": [
       "TEST-028"

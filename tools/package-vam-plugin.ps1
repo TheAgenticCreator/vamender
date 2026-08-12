@@ -2,7 +2,7 @@
 
 [CmdletBinding()]
 param(
-    [string]$OutputPath = ".\dist\AgenticCreator.VaMender.1.var",
+    [string]$OutputPath = ".\dist\AgenticCreator.VaMender.2.var",
     [string]$PluginAssemblyPath =
         ".\vam-plugin\Custom\Scripts\AgenticCreator\VaMender\VaMender.dll"
 )

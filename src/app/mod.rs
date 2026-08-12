@@ -2447,6 +2447,11 @@ pub(crate) fn run() -> Result<()> {
         .map_err(|_| anyhow::anyhow!("VAR command worker panicked"))?
 }
 
+#[allow(dead_code)]
+pub(crate) fn run_installed_tray_host() -> Result<()> {
+    run_tray_host(installed_host_arguments()?)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

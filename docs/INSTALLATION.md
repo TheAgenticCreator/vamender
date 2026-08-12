@@ -56,12 +56,15 @@ plugin is checksum-verified first.
 
 Choose **Finish**. Confirm the VaMender shield appears in the Windows
 notification area. Then open VaM, rescan packages, add VaMender under **Session
-Plugins**, and confirm its status says **VAMENDER — ENGINE ONLINE**.
+Plugins**, and confirm its status says **VAMENDER — ENGINE ONLINE**. Setup and
+Windows sign-in launch the background host without opening a command window.
 
 ![VaMender installation complete](images/installer/07-complete.png)
 
 Right-click the notification-area icon to confirm the engine is ready and to
-open reports, backups, About, startup settings, or the safe Exit command.
+open reports, backups, About, startup settings, or the safe Exit command. Clear
+**Start with Windows** to disable automatic background startup; choose **Exit
+VaMender** to stop the currently running host after any work finishes.
 
 ![VaMender notification-area menu](images/interface/01-tray-menu.png)
 

@@ -15,7 +15,7 @@ open during operations and rescans its package registry when work completes.
    [VaMender releases](https://github.com/TheAgenticCreator/vamender/releases).
 2. Choose the folder containing `VaM.exe` and a durable backup folder outside
    `AddonPackages`. Setup installs the engine and
-   `AgenticCreator.VaMender.1.var`; no PowerShell script or open console is
+   `AgenticCreator.VaMender.2.var`; no PowerShell script or open console is
    required.
 3. In VaM, add
    `AgenticCreator.VaMender.1:/Custom/Scripts/AgenticCreator/VaMender/VaMender.dll`

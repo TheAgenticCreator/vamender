@@ -14,7 +14,7 @@ rules, posts, or screenshots remain acceptable.
   ZIP, Session Plugin VAR, and SHA-256 sidecars.
 - **Normal-user installation:** download the versioned `VaMender-Setup-<version>.exe`
   and its `.sha256` sidecar from that GitHub release. Setup installs both the
-  per-user engine and bundled `AgenticCreator.VaMender.1.var` Session Plugin.
+  per-user engine and bundled `AgenticCreator.VaMender.2.var` Session Plugin.
 - **Standalone VAR:** a CI-packaged/manual artifact, not a normal installation
   path and not an F95Zone attachment. It cannot supply the external engine
   needed by the plugin.
@@ -43,11 +43,11 @@ rules, posts, or screenshots remain acceptable.
 
 ## Copy-ready F95Zone post
 
-Use this text for the initial `v0.1.0` thread. Replace only the versioned
-GitHub URL and release-specific changelog summary for later versions.
+Use this text for the `v0.2.0` beta thread. Replace only the versioned GitHub
+URL and release-specific changelog summary for later versions.
 
 ```markdown
-# VaMender v0.1.0 Beta — backup-first VaM VAR diagnosis and repair
+# VaMender v0.2.0 Beta — backup-first VaM VAR diagnosis and repair
 
 **Windows x64 · VaM 1.22.0.13 tested · beta software**
 
@@ -59,8 +59,8 @@ data locally.
 
 ## Download and install
 
-Download [VaMender v0.1.0 from GitHub Releases](https://github.com/TheAgenticCreator/vamender/releases/tag/v0.1.0).
-Download `VaMender-Setup-0.1.0.exe` and its `.sha256` sidecar from that page,
+Download [VaMender v0.2.0 from GitHub Releases](https://github.com/TheAgenticCreator/vamender/releases/tag/v0.2.0).
+Download `VaMender-Setup-0.2.0.exe` and its `.sha256` sidecar from that page,
 optionally verify the checksum, then run Setup. Setup installs the external
 VaMender engine and the bundled VaM Session Plugin; no PowerShell, administrator
 rights, or manual VAR install is required.
