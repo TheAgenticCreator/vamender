@@ -181,8 +181,8 @@ jobs:
           if ($info.ProductVersion -ne $expectedVersion) {
             throw "ProductVersion $($info.ProductVersion) does not match $expectedVersion"
           }
-          $host = (Resolve-Path target\release\vamender-host.exe).Path
-          [byte[]]$hostBytes = [IO.File]::ReadAllBytes($host)
+          $hostExecutable = (Resolve-Path target\release\vamender-host.exe).Path
+          [byte[]]$hostBytes = [IO.File]::ReadAllBytes($hostExecutable)
           $peOffset = [BitConverter]::ToInt32($hostBytes, 0x3c)
           $subsystem = [BitConverter]::ToUInt16($hostBytes, $peOffset + 24 + 68)
           if ($subsystem -ne 2) {
